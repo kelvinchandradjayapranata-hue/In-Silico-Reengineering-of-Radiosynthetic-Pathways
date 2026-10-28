@@ -5,3 +5,10 @@ rdkit==2026.9.1
 matplotlib==3.11.2
 pandas==2.3.3
 numpy==2.5.4
+meeko==0.8.0
+# Dependensi runtime Meeko (tidak dideklarasikan sebagai Requires oleh paketnya)
+gemmi==0.7.5
+scipy==1.18.1
+
+# AutoDock Vina bukan paket Python; binary Windows diletakkan di tools/vina/
+# (lihat README) agar modul docking dapat dijalankan.

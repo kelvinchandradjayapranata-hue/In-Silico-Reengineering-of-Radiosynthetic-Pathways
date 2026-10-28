@@ -6,9 +6,11 @@ import argparse
 from pathlib import Path
 from typing import Sequence
 
+from blast_validation import main as blast_main
 from generate_readme import generate_readme
 from generate_report import generate_report
 from melanin_chem import save_results as save_chem_results
+from melanin_docking import main as docking_main
 from metabolic_fba import run_fba, run_sensitivity
 from ncbi_fetcher import fetch_all
 from visualization import plot_fba_fluxes
@@ -39,6 +41,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--biomass", type=float, default=0.1)
     parser.add_argument("--sensitivity", action="store_true")
     parser.add_argument("--no-sbml", action="store_true")
+    parser.add_argument(
+        "--with-blast",
+        action="store_true",
+        help="Jalankan validasi homologi tblastn (butuh BLAST+ dan genome).",
+    )
+    parser.add_argument(
+        "--with-docking",
+        action="store_true",
+        help="Jalankan docking pilot Vina (butuh Meeko dan binary Vina).",
+    )
     return parser
 
 
@@ -46,7 +58,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
 
     if not args.skip_fetch:
-        print("\n[1/6] Mengambil data NCBI...")
+        print("\n[1/8] Mengambil data NCBI...")
         results = fetch_all(force=args.force_fetch)
         errors = [row for row in results if row.get("status") == "error"]
         if errors:
@@ -55,13 +67,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "dilanjutkan dengan data yang tersedia."
             )
     else:
-        print("\n[1/6] Fetch dilewati (--skip-fetch).")
+        print("\n[1/8] Fetch dilewati (--skip-fetch).")
 
-    print("\n[2/6] Menghitung deskriptor monomer melanin...")
+    print("\n[2/8] Menghitung deskriptor monomer melanin...")
     chem = save_chem_results()
     print(f"       {len(chem['monomers'])} monomer diproses.")
 
-    print("\n[3/6] Menjalankan FBA radiosintesis...")
+    print("\n[3/8] Menjalankan FBA radiosintesis...")
     fba_kwargs = {
         "electron_input_limit": args.electron_limit,
         "energy_input_limit": args.energy_limit,
@@ -83,7 +95,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
 
     if args.sensitivity:
-        print("\n[4/6] Analisis sensitivitas input radiasi...")
+        print("\n[4/8] Analisis sensitivitas input radiasi...")
         payload = run_sensitivity(
             glucose_limit=args.glucose_limit,
             oxygen_limit=args.oxygen_limit,
@@ -93,12 +105,28 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         print(f"       {len(payload['rows'])} kombinasi diuji.")
     else:
-        print("\n[4/6] Analisis sensitivitas dilewati (--sensitivity untuk mengaktifkan).")
+        print("\n[4/8] Analisis sensitivitas dilewati (--sensitivity untuk mengaktifkan).")
 
-    print("\n[5/6] Membuat grafik fluks...")
+    if args.with_blast:
+        print("\n[5/8] Validasi homologi ortholog (tblastn)...")
+        return_code = blast_main([])
+        if return_code != 0:
+            print("[WARN] Validasi BLAST gagal; laporan memakai hasil sebelumnya.")
+    else:
+        print("\n[5/8] Validasi BLAST dilewati (--with-blast untuk mengaktifkan).")
+
+    if args.with_docking:
+        print("\n[6/8] Docking pilot DHN-melanin (AutoDock Vina)...")
+        return_code = docking_main([])
+        if return_code != 0:
+            print("[WARN] Docking gagal; laporan memakai hasil sebelumnya.")
+    else:
+        print("\n[6/8] Docking dilewati (--with-docking untuk mengaktifkan).")
+
+    print("\n[7/8] Membuat grafik fluks...")
     plot_fba_fluxes()
 
-    print("\n[6/6] Menulis laporan dan README...")
+    print("\n[8/8] Menulis laporan dan README...")
     report_path = generate_report()
     readme_path = generate_readme()
 

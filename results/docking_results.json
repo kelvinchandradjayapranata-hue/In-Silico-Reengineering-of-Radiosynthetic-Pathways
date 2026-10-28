@@ -1,0 +1,590 @@
+{
+  "generated_at": "2026-10-28T13:43:51.412138+00:00",
+  "tool": "melanin_biotech_docking",
+  "status": "completed",
+  "engine": {
+    "vina": "AutoDock Vina v1.2.7",
+    "meeko": "0.8.0",
+    "rdkit": "2026.9.1",
+    "python": "3.12.10"
+  },
+  "surrogate_notice": "Reseptor default adalah struktur homolog PDB (1GW0 untuk laccase, 8CG4 untuk PKS1), bukan struktur C. cladosporioides. Skor Vina tidak boleh ditafsirkan sebagai energi ikat target sebenarnya.",
+  "parameters": {
+    "exhaustiveness": 8,
+    "num_modes": 9,
+    "cpu": 4,
+    "seed": 42,
+    "box_size_default": [
+      22.0,
+      22.0,
+      22.0
+    ],
+    "prepare_only": false
+  },
+  "ligands": [
+    {
+      "name": "DHN_monomer",
+      "units": 1,
+      "description": "1,8-dihydroxynaphthalene monomer (PubChem CID 68438)",
+      "sdf": "data/ligands/DHN_monomer.sdf",
+      "pdbqt": "data/ligands/DHN_monomer.pdbqt",
+      "torsdof": 2,
+      "model_note": "Monomer DHN.",
+      "canonical_smiles": "Oc1cccc2cccc(O)c12",
+      "formula": "C10H8O2",
+      "molecular_weight": 160.17,
+      "logp": 2.251,
+      "tpsa": 40.46,
+      "h_bond_donors": 2,
+      "h_bond_acceptors": 2,
+      "rotatable_bonds": 0,
+      "heavy_atoms": 12
+    },
+    {
+      "name": "DHN_dimer",
+      "units": 2,
+      "description": "Model dimer 2,2'-linked; bukan struktur oligomer alami yang unik",
+      "sdf": "data/ligands/DHN_dimer.sdf",
+      "pdbqt": "data/ligands/DHN_dimer.pdbqt",
+      "torsdof": 5,
+      "model_note": "Model oligomer sintetis untuk eksplorasi; linkage bukan struktur DHN-melanin alami yang tunggal.",
+      "canonical_smiles": "Oc1cccc2ccc(-c3ccc4cccc(O)c4c3O)c(O)c12",
+      "formula": "C20H14O4",
+      "molecular_weight": 318.33,
+      "logp": 4.482,
+      "tpsa": 80.92,
+      "h_bond_donors": 4,
+      "h_bond_acceptors": 4,
+      "rotatable_bonds": 1,
+      "heavy_atoms": 24
+    },
+    {
+      "name": "DHN_trimer",
+      "units": 3,
+      "description": "Model trimer linear: unit tengah terhubung di posisi 2 dan 7 (2,2'/2,7'-linked; posisi 2/7 ekuivalen secara simetri); bukan struktur oligomer alami yang unik",
+      "sdf": "data/ligands/DHN_trimer.sdf",
+      "pdbqt": "data/ligands/DHN_trimer.pdbqt",
+      "torsdof": 8,
+      "model_note": "Model oligomer sintetis untuk eksplorasi; linkage bukan struktur DHN-melanin alami yang tunggal.",
+      "canonical_smiles": "Oc1cccc2ccc(-c3ccc4ccc(-c5ccc6cccc(O)c6c5O)c(O)c4c3O)c(O)c12",
+      "formula": "C30H20O6",
+      "molecular_weight": 476.48,
+      "logp": 6.714,
+      "tpsa": 121.38,
+      "h_bond_donors": 6,
+      "h_bond_acceptors": 6,
+      "rotatable_bonds": 2,
+      "heavy_atoms": 36
+    }
+  ],
+  "receptors": [
+    {
+      "name": "Laccase_surrogate_1GW0",
+      "target_id": "ccla_laccase",
+      "target_accession": "KAN3060494.1",
+      "pdb_id": "1GW0",
+      "pdb_path": "data/structures/1GW0.pdb",
+      "source_url": "https://files.rcsb.org/download/1GW0.pdb",
+      "sha256": "a067a2fc065e1d5ead3feaae0fd914931f3c62d5272a406931e4d72629febbd0",
+      "size_bytes": 924372,
+      "surrogate": true,
+      "identity_percent": 44.7,
+      "coverage_percent": 91.7,
+      "note": "Laccase dari Melanocarpus albomyces; homolog terdekat yang tersedia di PDB. Tembaga T1 dipakai untuk pusat kotak, tetapi logam dihapus dari reseptor PDBQT (reseptor apo).",
+      "chain": "A",
+      "atoms_kept": 4369,
+      "clean_pdb": "data/structures/prepared/Laccase_surrogate_1GW0_clean.pdb",
+      "pdbqt": "data/structures/prepared/Laccase_surrogate_1GW0.pdbqt",
+      "box_file": "data/structures/prepared/Laccase_surrogate_1GW0_box.txt",
+      "box_center": [
+        3.465,
+        10.532,
+        7.68
+      ],
+      "box_size": [
+        22.0,
+        22.0,
+        22.0
+      ],
+      "box_center_source": "T1 copper serial 9143 (Cys503 SG, 2.2 A)",
+      "t1_copper": {
+        "center": [
+          3.465,
+          10.532,
+          7.68
+        ],
+        "distance_to_cys_sg": 2.2,
+        "copper_serial": 9143,
+        "cys_residue": 503
+      }
+    },
+    {
+      "name": "PKS1_surrogate_8CG4",
+      "target_id": "ccla_pks1",
+      "target_accession": "KAN3049821.1",
+      "pdb_id": "8CG4",
+      "pdb_path": "data/structures/8CG4.pdb",
+      "source_url": "https://files.rcsb.org/download/8CG4.pdb",
+      "sha256": "abe9d6f840cbebf75724fddd483f95cfda88d000a74fa004be86069fc9f53e02",
+      "size_bytes": 3335418,
+      "surrogate": true,
+      "identity_percent": 36.4,
+      "coverage_percent": 94.7,
+      "note": "Norsolorinic acid synthase dari Aspergillus parasiticus; konstruk KS-AT (residu 3-1254). DHN adalah produk, bukan substrat PKS, sehingga docking ini hanya eksplorasi kualitatif.",
+      "chain": "A",
+      "atoms_kept": 19220,
+      "clean_pdb": "data/structures/prepared/PKS1_surrogate_8CG4_clean.pdb",
+      "pdbqt": "data/structures/prepared/PKS1_surrogate_8CG4.pdbqt",
+      "box_file": "data/structures/prepared/PKS1_surrogate_8CG4_box.txt",
+      "box_center": [
+        169.803,
+        164.0,
+        134.493
+      ],
+      "box_size": [
+        22.0,
+        22.0,
+        22.0
+      ],
+      "box_center_source": "SG atom Cys543 (katalitik KS motif DTACSSSL)",
+      "t1_copper": null
+    }
+  ],
+  "results": [
+    {
+      "receptor": "Laccase_surrogate_1GW0",
+      "ligand": "DHN_monomer",
+      "status": "ok",
+      "best_affinity_kcal_mol": -5.102,
+      "poses": [
+        {
+          "mode": 1,
+          "affinity_kcal_mol": -5.102,
+          "rmsd_lb": 0.0,
+          "rmsd_ub": 0.0
+        },
+        {
+          "mode": 2,
+          "affinity_kcal_mol": -5.089,
+          "rmsd_lb": 0.05081,
+          "rmsd_ub": 3.352
+        },
+        {
+          "mode": 3,
+          "affinity_kcal_mol": -4.995,
+          "rmsd_lb": 1.005,
+          "rmsd_ub": 3.326
+        },
+        {
+          "mode": 4,
+          "affinity_kcal_mol": -4.603,
+          "rmsd_lb": 1.733,
+          "rmsd_ub": 3.453
+        },
+        {
+          "mode": 5,
+          "affinity_kcal_mol": -4.59,
+          "rmsd_lb": 1.58,
+          "rmsd_ub": 2.518
+        },
+        {
+          "mode": 6,
+          "affinity_kcal_mol": -4.463,
+          "rmsd_lb": 4.257,
+          "rmsd_ub": 5.567
+        },
+        {
+          "mode": 7,
+          "affinity_kcal_mol": -4.458,
+          "rmsd_lb": 4.252,
+          "rmsd_ub": 5.937
+        },
+        {
+          "mode": 8,
+          "affinity_kcal_mol": -4.328,
+          "rmsd_lb": 1.902,
+          "rmsd_ub": 3.252
+        },
+        {
+          "mode": 9,
+          "affinity_kcal_mol": -4.13,
+          "rmsd_lb": 2.252,
+          "rmsd_ub": 4.296
+        }
+      ],
+      "pose_file": "results/docking/poses/Laccase_surrogate_1GW0__DHN_monomer.pdbqt",
+      "log": "results/docking/logs/Laccase_surrogate_1GW0__DHN_monomer.log",
+      "ligand_efficiency": -0.425
+    },
+    {
+      "receptor": "Laccase_surrogate_1GW0",
+      "ligand": "DHN_dimer",
+      "status": "ok",
+      "best_affinity_kcal_mol": -3.163,
+      "poses": [
+        {
+          "mode": 1,
+          "affinity_kcal_mol": -3.163,
+          "rmsd_lb": 0.0,
+          "rmsd_ub": 0.0
+        },
+        {
+          "mode": 2,
+          "affinity_kcal_mol": -3.062,
+          "rmsd_lb": 0.2409,
+          "rmsd_ub": 7.075
+        },
+        {
+          "mode": 3,
+          "affinity_kcal_mol": -2.792,
+          "rmsd_lb": 1.49,
+          "rmsd_ub": 2.078
+        },
+        {
+          "mode": 4,
+          "affinity_kcal_mol": -2.74,
+          "rmsd_lb": 1.479,
+          "rmsd_ub": 7.35
+        },
+        {
+          "mode": 5,
+          "affinity_kcal_mol": -2.284,
+          "rmsd_lb": 1.754,
+          "rmsd_ub": 2.671
+        },
+        {
+          "mode": 6,
+          "affinity_kcal_mol": -2.031,
+          "rmsd_lb": 1.911,
+          "rmsd_ub": 3.268
+        },
+        {
+          "mode": 7,
+          "affinity_kcal_mol": -1.751,
+          "rmsd_lb": 1.851,
+          "rmsd_ub": 2.935
+        },
+        {
+          "mode": 8,
+          "affinity_kcal_mol": -1.462,
+          "rmsd_lb": 2.405,
+          "rmsd_ub": 7.176
+        },
+        {
+          "mode": 9,
+          "affinity_kcal_mol": -1.458,
+          "rmsd_lb": 1.904,
+          "rmsd_ub": 7.075
+        }
+      ],
+      "pose_file": "results/docking/poses/Laccase_surrogate_1GW0__DHN_dimer.pdbqt",
+      "log": "results/docking/logs/Laccase_surrogate_1GW0__DHN_dimer.log",
+      "ligand_efficiency": -0.132
+    },
+    {
+      "receptor": "Laccase_surrogate_1GW0",
+      "ligand": "DHN_trimer",
+      "status": "ok",
+      "best_affinity_kcal_mol": 2.275,
+      "poses": [
+        {
+          "mode": 1,
+          "affinity_kcal_mol": 2.275,
+          "rmsd_lb": 0.0,
+          "rmsd_ub": 0.0
+        },
+        {
+          "mode": 2,
+          "affinity_kcal_mol": 2.361,
+          "rmsd_lb": 0.08394,
+          "rmsd_ub": 10.52
+        },
+        {
+          "mode": 3,
+          "affinity_kcal_mol": 5.738,
+          "rmsd_lb": 1.47,
+          "rmsd_ub": 2.007
+        },
+        {
+          "mode": 4,
+          "affinity_kcal_mol": 5.923,
+          "rmsd_lb": 1.7,
+          "rmsd_ub": 10.32
+        },
+        {
+          "mode": 5,
+          "affinity_kcal_mol": 6.265,
+          "rmsd_lb": 6.43,
+          "rmsd_ub": 8.59
+        },
+        {
+          "mode": 6,
+          "affinity_kcal_mol": 7.02,
+          "rmsd_lb": 1.862,
+          "rmsd_ub": 3.158
+        },
+        {
+          "mode": 7,
+          "affinity_kcal_mol": 7.248,
+          "rmsd_lb": 1.862,
+          "rmsd_ub": 11.03
+        },
+        {
+          "mode": 8,
+          "affinity_kcal_mol": 8.142,
+          "rmsd_lb": 8.214,
+          "rmsd_ub": 9.254
+        },
+        {
+          "mode": 9,
+          "affinity_kcal_mol": 12.33,
+          "rmsd_lb": 7.363,
+          "rmsd_ub": 9.534
+        }
+      ],
+      "pose_file": "results/docking/poses/Laccase_surrogate_1GW0__DHN_trimer.pdbqt",
+      "log": "results/docking/logs/Laccase_surrogate_1GW0__DHN_trimer.log",
+      "ligand_efficiency": 0.063
+    },
+    {
+      "receptor": "PKS1_surrogate_8CG4",
+      "ligand": "DHN_monomer",
+      "status": "ok",
+      "best_affinity_kcal_mol": -5.911,
+      "poses": [
+        {
+          "mode": 1,
+          "affinity_kcal_mol": -5.911,
+          "rmsd_lb": 0.0,
+          "rmsd_ub": 0.0
+        },
+        {
+          "mode": 2,
+          "affinity_kcal_mol": -5.906,
+          "rmsd_lb": 0.04864,
+          "rmsd_ub": 3.352
+        },
+        {
+          "mode": 3,
+          "affinity_kcal_mol": -5.873,
+          "rmsd_lb": 1.949,
+          "rmsd_ub": 3.727
+        },
+        {
+          "mode": 4,
+          "affinity_kcal_mol": -5.867,
+          "rmsd_lb": 2.003,
+          "rmsd_ub": 2.251
+        },
+        {
+          "mode": 5,
+          "affinity_kcal_mol": -5.722,
+          "rmsd_lb": 2.44,
+          "rmsd_ub": 3.638
+        },
+        {
+          "mode": 6,
+          "affinity_kcal_mol": -5.712,
+          "rmsd_lb": 2.563,
+          "rmsd_ub": 3.399
+        },
+        {
+          "mode": 7,
+          "affinity_kcal_mol": -5.7,
+          "rmsd_lb": 3.292,
+          "rmsd_ub": 4.985
+        },
+        {
+          "mode": 8,
+          "affinity_kcal_mol": -5.605,
+          "rmsd_lb": 2.5,
+          "rmsd_ub": 2.991
+        },
+        {
+          "mode": 9,
+          "affinity_kcal_mol": -5.552,
+          "rmsd_lb": 2.732,
+          "rmsd_ub": 3.819
+        }
+      ],
+      "pose_file": "results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt",
+      "log": "results/docking/logs/PKS1_surrogate_8CG4__DHN_monomer.log",
+      "ligand_efficiency": -0.493
+    },
+    {
+      "receptor": "PKS1_surrogate_8CG4",
+      "ligand": "DHN_dimer",
+      "status": "ok",
+      "best_affinity_kcal_mol": -8.889,
+      "poses": [
+        {
+          "mode": 1,
+          "affinity_kcal_mol": -8.889,
+          "rmsd_lb": 0.0,
+          "rmsd_ub": 0.0
+        },
+        {
+          "mode": 2,
+          "affinity_kcal_mol": -8.817,
+          "rmsd_lb": 0.7047,
+          "rmsd_ub": 7.399
+        },
+        {
+          "mode": 3,
+          "affinity_kcal_mol": -8.781,
+          "rmsd_lb": 3.442,
+          "rmsd_ub": 5.566
+        },
+        {
+          "mode": 4,
+          "affinity_kcal_mol": -8.781,
+          "rmsd_lb": 3.446,
+          "rmsd_ub": 8.3
+        },
+        {
+          "mode": 5,
+          "affinity_kcal_mol": -8.18,
+          "rmsd_lb": 1.548,
+          "rmsd_ub": 7.368
+        },
+        {
+          "mode": 6,
+          "affinity_kcal_mol": -8.172,
+          "rmsd_lb": 2.042,
+          "rmsd_ub": 7.537
+        },
+        {
+          "mode": 7,
+          "affinity_kcal_mol": -7.795,
+          "rmsd_lb": 4.564,
+          "rmsd_ub": 6.153
+        },
+        {
+          "mode": 8,
+          "affinity_kcal_mol": -7.766,
+          "rmsd_lb": 4.625,
+          "rmsd_ub": 7.155
+        },
+        {
+          "mode": 9,
+          "affinity_kcal_mol": -7.37,
+          "rmsd_lb": 3.239,
+          "rmsd_ub": 7.812
+        }
+      ],
+      "pose_file": "results/docking/poses/PKS1_surrogate_8CG4__DHN_dimer.pdbqt",
+      "log": "results/docking/logs/PKS1_surrogate_8CG4__DHN_dimer.log",
+      "ligand_efficiency": -0.37
+    },
+    {
+      "receptor": "PKS1_surrogate_8CG4",
+      "ligand": "DHN_trimer",
+      "status": "ok",
+      "best_affinity_kcal_mol": -9.663,
+      "poses": [
+        {
+          "mode": 1,
+          "affinity_kcal_mol": -9.663,
+          "rmsd_lb": 0.0,
+          "rmsd_ub": 0.0
+        },
+        {
+          "mode": 2,
+          "affinity_kcal_mol": -9.492,
+          "rmsd_lb": 0.1253,
+          "rmsd_ub": 10.17
+        },
+        {
+          "mode": 3,
+          "affinity_kcal_mol": -9.095,
+          "rmsd_lb": 3.571,
+          "rmsd_ub": 10.02
+        },
+        {
+          "mode": 4,
+          "affinity_kcal_mol": -8.931,
+          "rmsd_lb": 3.584,
+          "rmsd_ub": 5.522
+        },
+        {
+          "mode": 5,
+          "affinity_kcal_mol": -8.66,
+          "rmsd_lb": 1.443,
+          "rmsd_ub": 2.166
+        },
+        {
+          "mode": 6,
+          "affinity_kcal_mol": -8.602,
+          "rmsd_lb": 1.435,
+          "rmsd_ub": 10.29
+        },
+        {
+          "mode": 7,
+          "affinity_kcal_mol": -8.056,
+          "rmsd_lb": 2.271,
+          "rmsd_ub": 3.442
+        },
+        {
+          "mode": 8,
+          "affinity_kcal_mol": -7.906,
+          "rmsd_lb": 2.479,
+          "rmsd_ub": 10.68
+        },
+        {
+          "mode": 9,
+          "affinity_kcal_mol": -7.528,
+          "rmsd_lb": 3.612,
+          "rmsd_ub": 5.438
+        }
+      ],
+      "pose_file": "results/docking/poses/PKS1_surrogate_8CG4__DHN_trimer.pdbqt",
+      "log": "results/docking/logs/PKS1_surrogate_8CG4__DHN_trimer.log",
+      "ligand_efficiency": -0.268
+    }
+  ],
+  "summary": {
+    "runs_total": 6,
+    "runs_ok": 6,
+    "runs_failed": 0,
+    "affinity_matrix": {
+      "Laccase_surrogate_1GW0": {
+        "DHN_monomer": -5.102,
+        "DHN_dimer": -3.163,
+        "DHN_trimer": 2.275
+      },
+      "PKS1_surrogate_8CG4": {
+        "DHN_monomer": -5.911,
+        "DHN_dimer": -8.889,
+        "DHN_trimer": -9.663
+      }
+    },
+    "ligand_efficiency_matrix": {
+      "Laccase_surrogate_1GW0": {
+        "DHN_monomer": -0.425,
+        "DHN_dimer": -0.132,
+        "DHN_trimer": 0.063
+      },
+      "PKS1_surrogate_8CG4": {
+        "DHN_monomer": -0.493,
+        "DHN_dimer": -0.37,
+        "DHN_trimer": -0.268
+      }
+    }
+  },
+  "assumptions": [
+    "Ligan DHN dimer/trimer adalah model sintetis dengan linkage C-C sederhana, bukan struktur oligomer alami yang unik.",
+    "Reseptor default adalah homolog PDB, bukan struktur target C. cladosporioides.",
+    "Logam tembaga dan glikan dihapus dari reseptor laccase; reseptor bersifat apo.",
+    "Kotak docking berpusat pada situs aktif T1 laccase atau Cys katalitik KS PKS1.",
+    "Vina mensimulasikan docking rigid-receptor; fleksibilitas side chain tidak dimodelkan."
+  ],
+  "caveats": [
+    "Skor Vina bukan energi bebas ikat eksperimental (bukan ΔG).",
+    "Tidak ada validasi eksperimental atau simulasi MD untuk pose terbaik.",
+    "PKS1 mendock DHN sebagai produk, bukan substrat; relevansi biologisnya spekulatif.",
+    "Model dimer/trimer tidak mewakili heterogenitas melanin alami.",
+    "Skor Vina tidak dinormalisasi terhadap ukuran ligan; ligan lebih besar cenderung memperoleh skor lebih favorable. Bandingkan ligand efficiency, bukan hanya afinitas mentah.",
+    "Perbedaan kecil skor (<1 kcal/mol) tidak dapat dianggap signifikan."
+  ],
+  "interpretation": "6 dari 6 run docking berhasil. Skor mentah terbaik -9.663 kcal/mol untuk DHN_trimer pada PKS1_surrogate_8CG4; ligand efficiency terbaik -0.493 kcal/mol per heavy atom untuk DHN_monomer pada PKS1_surrogate_8CG4. Skor Vina tidak dinormalisasi terhadap ukuran ligan, sehingga monomer, dimer, dan trimer harus dibandingkan dengan ligand efficiency, bukan skor mentah saja. Semua reseptor adalah surrogate homolog, sehingga angka ini bukan afinitas target C. cladosporioides dan hanya untuk perbandingan internal."
+}

@@ -170,8 +170,14 @@
     {
       "accession": "GCA_001931905.1",
       "organism": "Cladosporium sphaerospermum IMV 00045",
-      "description": "Draft genome isolat dari ISS; file genomic.gbff tidak memiliki CDS teranotasi (hanya fitur source).",
+      "description": "Draft genome isolat dari ISS; file genomic.gbff tidak memiliki CDS teranotasi (hanya fitur source). Status NCBI: previous; digantikan oleh GCA_001931905.2.",
       "url": "https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_001931905.1/"
+    },
+    {
+      "accession": "GCA_001931905.2",
+      "organism": "Cladosporium sphaerospermum IMV 00045",
+      "description": "Assembly saat ini (current) untuk strain IMV 00045; menggantikan GCA_001931905.1.",
+      "url": "https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_001931905.2/"
     },
     {
       "accession": "GCA_000261425.2",

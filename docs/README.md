@@ -7,6 +7,27 @@ Dokumentasi utama saat ini tersedia di:
 - `data/raw/README.md` — provenance data NCBI dan catatan validasi.
 - `data/raw/manifest.json` — metadata, checksum, dan level bukti setiap sekuens.
 - `models/melanin_radiosynthesis_fba_v2.xml` — model SBML hasil FBA.
+- `results/blast_validation.json` — hasil validasi homologi tblastn terhadap
+  tiga assembly *C. sphaerospermum*.
+- `results/docking_results.json` — hasil docking pilot DHN monomer/dimer/trimer
+  ke struktur homolog PKS1 dan laccase.
+- `scripts/run_docking_colab.sh` — runner AutoDock Vina multi-seed untuk
+  Google Colab CPU (lihat README).
+- `scripts/aggregate_docking_seeds.py` — agregasi statistik antar-seed.
+
+## Menjalankan docking di Google Colab
+
+Vina hanya memakai CPU. Buka runtime **CPU** Colab, clone repositori, lalu
+jalankan:
+
+```bash
+!bash scripts/run_docking_colab.sh
+```
+
+Atur `SEEDS`, `EXHAUSTIVENESS`, `NUM_MODES`, `BOX_SIZE`, `LIGANDS`,
+`RECEPTORS`, `CPU`, dan `OUTPUT_DIR` sebagai environment variable bila perlu.
+Script mengunduh Vina 1.2.7 Linux, menjalankan beberapa seed, dan menulis
+`results/docking_results.json` serta `results/docking_summary.tsv`.
 
 ## Pertanyaan riset awal
 
@@ -18,12 +39,15 @@ Dokumentasi utama saat ini tersedia di:
 
 ## Roadmap
 
-- [ ] Validasi ortholog *C. sphaerospermum* dengan BLAST/tblastn terhadap
-      assembly GCA_001931905.1 atau GCA_000261425.2.
+- [x] Validasi ortholog *C. sphaerospermum* dengan tblastn terhadap assembly
+      GCA_001931905.1, GCA_001931905.2, dan GCA_000261425.2.
+- [x] Menambahkan modul docking pilot (DHN monomer/dimer/trimer vs struktur
+      homolog PKS1/laccase).
+- [x] Menyediakan runner Colab CPU untuk docking presisi tinggi multi-seed.
 - [ ] Kalibrasi parameter biomass dan ATP maintenance.
 - [ ] Menambahkan analisis sensitivitas parameter (bukan hanya batas radiasi).
-- [ ] Menambahkan modul docking bila diperlukan.
 - [ ] Menambahkan test suite dan CI.
+- [ ] Validasi eksperimental atau simulasi MD untuk pose docking (opsional).
 
 ## Catatan
 

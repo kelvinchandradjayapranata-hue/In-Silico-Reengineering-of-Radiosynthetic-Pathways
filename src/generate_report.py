@@ -214,13 +214,20 @@ def _section_provenance(manifest: dict[str, Any] | None) -> list[str]:
 
     assemblies = manifest.get("reference_assemblies") or []
     if assemblies:
-        lines.extend(["### Assembly referensi (tidak diunduh)", ""])
+        lines.extend(["### Assembly referensi", ""])
         for assembly in assemblies:
             lines.append(
                 f"- `{assembly.get('accession', '-')}` — "
                 f"{assembly.get('organism', '-')}: {assembly.get('description', '-')}"
             )
-        lines.append("")
+        lines.extend(
+            [
+                "",
+                "Genome assembly diunduh dan diverifikasi checksum-nya oleh "
+                "`src/blast_validation.py` sesuai kebutuhan.",
+                "",
+            ]
+        )
 
     return lines
 
@@ -287,13 +294,245 @@ def _section_sensitivity(data: dict[str, Any] | None) -> list[str]:
     ]
 
 
+def _section_blast(data: dict[str, Any] | None, number: int) -> list[str]:
+    if not data:
+        return []
+
+    summary = data.get("summary", {})
+    counts = summary.get("classifications", {})
+    assemblies = [
+        assembly.get("accession", "-") for assembly in data.get("assemblies", [])
+    ]
+    best_hits = data.get("best_hits", [])
+    parameters = data.get("parameters", {})
+
+    lines = [
+        f"## {number}. Validasi Homologi Ortholog (tblastn)",
+        "",
+        f"- Metode: {data.get('method', '-')}",
+        f"- Versi BLAST: `{data.get('blast_version', '-')}`",
+        f"- Parameter: e-value <= {parameters.get('evalue', '-')}, "
+        f"max_target_seqs {parameters.get('max_target_seqs', '-')}, "
+        f"max_hsps {parameters.get('max_hsps', '-')}, "
+        f"SEG {parameters.get('seg', '-')}",
+        f"- Total hit mentah: {data.get('hits_total', '-')}",
+        "",
+        "### Ringkasan klasifikasi",
+        "",
+        _table(
+            ["Assembly", "Strong", "Moderate", "Weak", "Tidak terdeteksi"],
+            [
+                [
+                    assembly,
+                    summary.get("per_assembly", {}).get(assembly, {}).get("strong", 0),
+                    summary.get("per_assembly", {}).get(assembly, {}).get("moderate", 0),
+                    summary.get("per_assembly", {}).get(assembly, {}).get("weak", 0),
+                    summary.get("per_assembly", {})
+                    .get(assembly, {})
+                    .get("not_detected", 0),
+                ]
+                for assembly in assemblies
+            ],
+        ),
+        "",
+        "### Hit terbaik per query",
+        "",
+    ]
+
+    rows = []
+    for query in data.get("queries", []):
+        query_id = query.get("query_id", "-")
+        row = [query_id.replace("|", "\\|"), query.get("gene", "-")]
+        for assembly in assemblies:
+            hit = next(
+                (
+                    item
+                    for item in best_hits
+                    if item.get("query_id") == query_id
+                    and item.get("assembly") == assembly
+                ),
+                None,
+            )
+            if hit is None or hit.get("classification") == "not_detected":
+                row.append("tidak terdeteksi")
+            else:
+                row.append(
+                    "{classification} ({pident:.1f}%, cov {coverage:.2f})".format(
+                        classification=hit.get("classification", "-"),
+                        pident=hit.get("pident") or 0.0,
+                        coverage=hit.get("query_coverage") or 0.0,
+                    )
+                )
+        rows.append(row)
+
+    lines.extend([_table(["Query", "Gen"] + assemblies, rows), ""])
+    lines.extend(
+        [
+            "Detail subject, koordinat, dan e-value tersedia di "
+            "`results/blast_validation.json` dan `results/blast_hits.tsv`.",
+            "",
+        ]
+    )
+
+    interpretation = data.get("interpretation")
+    if interpretation:
+        lines.extend([interpretation, ""])
+
+    caveats = data.get("caveats") or []
+    if caveats:
+        lines.extend(["### Keterbatasan validasi BLAST", ""])
+        lines.extend([f"- {item}" for item in caveats])
+        lines.append("")
+    return lines
+
+
+def _section_docking(data: dict[str, Any] | None, number: int) -> list[str]:
+    if not data:
+        return []
+
+    engine = data.get("engine", {})
+    summary = data.get("summary", {})
+    aggregation = summary.get("aggregation", {})
+    multi_seed = aggregation.get("method") == "multi_seed"
+    seeds = summary.get("seeds") or aggregation.get("seeds") or []
+    title_kind = "Docking Multi-Seed" if multi_seed else "Docking Pilot"
+    lines = [
+        f"## {number}. {title_kind} DHN-melanin (AutoDock Vina)",
+        "",
+        f"- Status: `{data.get('status', '-')}`",
+        f"- Engine: {engine.get('vina', '-')}; Meeko {engine.get('meeko', '-')}; "
+        f"RDKit {engine.get('rdkit', '-')}",
+    ]
+    if seeds:
+        lines.append(
+            f"- Seed: {', '.join(str(seed) for seed in seeds)}; "
+            f"{summary.get('runs_ok', 0)}/{summary.get('runs_total', 0)} "
+            "kombinasi reseptor x ligan berhasil."
+        )
+    lines.append("")
+
+    notice = data.get("surrogate_notice")
+    if notice:
+        lines.extend([f"> **Catatan:** {notice}", ""])
+
+    matrix = summary.get("affinity_matrix", {})
+    ligand_names = [
+        ligand.get("name", "-") for ligand in data.get("ligands", [])
+    ]
+    affinity_label = (
+        "Afinitas rata-rata antar-seed (kcal/mol)"
+        if multi_seed
+        else "Afinitas terbaik (kcal/mol)"
+    )
+    if matrix and ligand_names:
+        rows = []
+        for receptor, values in matrix.items():
+            row = [receptor]
+            for ligand_name in ligand_names:
+                value = values.get(ligand_name)
+                row.append(f"{value:.2f}" if value is not None else "-")
+            rows.append(row)
+        lines.extend(
+            [
+                f"### {affinity_label}",
+                "",
+                _table(["Reseptor (surrogate)"] + ligand_names, rows),
+                "",
+            ]
+        )
+
+    efficiency = summary.get("ligand_efficiency_matrix", {})
+    if efficiency and ligand_names:
+        efficiency_rows = []
+        for receptor, values in efficiency.items():
+            row = [receptor]
+            for ligand_name in ligand_names:
+                value = values.get(ligand_name)
+                row.append(f"{value:.3f}" if value is not None else "-")
+            efficiency_rows.append(row)
+        efficiency_label = (
+            "Ligand efficiency rata-rata antar-seed "
+            "(kcal/mol per heavy atom)"
+            if multi_seed
+            else "Ligand efficiency (kcal/mol per heavy atom)"
+        )
+        basis = "rata-rata afinitas" if multi_seed else "afinitas terbaik"
+        lines.extend(
+            [
+                f"### {efficiency_label}",
+                "",
+                _table(["Reseptor (surrogate)"] + ligand_names, efficiency_rows),
+                "",
+                f"Ligand efficiency = {basis} / jumlah atom berat. Metrik ini "
+                "sebagian mengoreksi bias ukuran ligan pada skor Vina.",
+                "",
+            ]
+        )
+        if multi_seed:
+            lines.extend(
+                [
+                    "Matriks nilai terbaik dan simpangan baku antar-seed "
+                    "tersedia di `results/docking_results.json`.",
+                    "",
+                ]
+            )
+
+    receptor_rows = []
+    for receptor in data.get("receptors", []):
+        if receptor.get("status") == "error":
+            continue
+        receptor_rows.append(
+            [
+                receptor.get("name", "-"),
+                receptor.get("pdb_id", "-"),
+                receptor.get("target_accession", "-"),
+                (
+                    f"{receptor.get('identity_percent', '-')}% / "
+                    f"{receptor.get('coverage_percent', '-')}%"
+                ),
+                receptor.get("box_center_source", "-"),
+            ]
+        )
+    if receptor_rows:
+        lines.extend(
+            [
+                "### Reseptor",
+                "",
+                _table(
+                    [
+                        "Reseptor",
+                        "PDB",
+                        "Target",
+                        "Identitas / coverage",
+                        "Sumber pusat kotak",
+                    ],
+                    receptor_rows,
+                ),
+                "",
+            ]
+        )
+
+    interpretation = data.get("interpretation")
+    if interpretation:
+        lines.extend([interpretation, ""])
+
+    caveats = data.get("caveats") or []
+    if caveats:
+        lines.extend(["### Keterbatasan docking", ""])
+        lines.extend([f"- {item}" for item in caveats])
+        lines.append("")
+    return lines
+
+
 def _section_processed_stats(
-    processed_files: Sequence[Path], root: Path = PROJECT_ROOT
+    processed_files: Sequence[Path],
+    root: Path = PROJECT_ROOT,
+    number: int = 5,
 ) -> list[str]:
     if not processed_files:
         return []
 
-    lines = ["## 5. Statistik Data Terproses", ""]
+    lines = [f"## {number}. Statistik Data Terproses", ""]
     for path in processed_files:
         data = _read_json(path)
         display_path = path.relative_to(root) if path.is_relative_to(root) else path
@@ -323,6 +562,8 @@ def generate_report(
     fba = _read_json(results_dir / "metabolic_fba.json")
     chem = _read_json(results_dir / "melanin_chem.json")
     sensitivity = _read_json(results_dir / "fba_sensitivity.json")
+    blast = _read_json(results_dir / "blast_validation.json")
+    docking = _read_json(results_dir / "docking_results.json")
     manifest = _read_json(raw_dir / "manifest.json")
     processed_files = sorted(processed_dir.glob("*_stats.json")) if processed_dir.is_dir() else []
 
@@ -332,6 +573,21 @@ def generate_report(
         raw_dir / "manifest.json",
     ]
     missing = [path for path in expected if not path.is_file()]
+    optional_missing = []
+    if blast is None:
+        optional_missing.append(
+            "- `results/blast_validation.json` — jalankan "
+            "`python src/blast_validation.py` untuk validasi homologi."
+        )
+    if docking is None:
+        optional_missing.append(
+            "- `results/docking_results.json` — jalankan "
+            "`python src/melanin_docking.py` untuk docking pilot."
+        )
+    if not processed_files:
+        optional_missing.append(
+            "- `data/processed/*_stats.json` — belum ada data terproses."
+        )
 
     lines: list[str] = [
         "# Ringkasan Hasil Riset Radiosintesis Melanin",
@@ -349,8 +605,15 @@ def generate_report(
         _section_chem(chem),
         _section_provenance(manifest),
         _section_sensitivity(sensitivity),
-        _section_processed_stats(processed_files, root),
     ]
+    next_number = sum(1 for section in sections if section) + 1
+    if blast:
+        sections.append(_section_blast(blast, next_number))
+        next_number += 1
+    if docking:
+        sections.append(_section_docking(docking, next_number))
+        next_number += 1
+    sections.append(_section_processed_stats(processed_files, root, next_number))
     for section in sections:
         if section:
             lines.extend(section)
@@ -360,13 +623,10 @@ def generate_report(
         lines.extend([f"- `{path.relative_to(root)}`" for path in missing])
     else:
         lines.append("- Semua artefak inti tersedia.")
-    lines.append(
-        "- `results/docking_results.json` — opsional; modul docking belum "
-        "diimplementasikan."
-    )
-    lines.append(
-        "- `data/processed/*_stats.json` — opsional; belum ada data terproses."
-    )
+    if optional_missing:
+        lines.extend(optional_missing)
+    else:
+        lines.append("- Semua artefak opsional yang diharapkan tersedia.")
     lines.append("")
 
     destination.parent.mkdir(parents=True, exist_ok=True)

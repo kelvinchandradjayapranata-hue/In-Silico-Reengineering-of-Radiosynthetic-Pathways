@@ -1,6 +1,6 @@
 # Ringkasan Hasil Riset Radiosintesis Melanin
 
-> Dibuat: 2026-10-28 11:55 UTC
+> Dibuat: 2026-10-28 14:06 UTC
 >
 > Ringkasan ini mengompilasi artefak komputasi yang tersedia. Skor model
 > merupakan estimasi theoretical/in silico dan bukan pengganti validasi
@@ -100,10 +100,13 @@ Metode: RDKit 2D descriptors; Gasteiger partial charges after explicit hydrogen 
 - Target lain adalah ortholog referensi dari Cladosporium cladosporioides dan Cladosporium halotolerans, bukan urutan langsung C. sphaerospermum.
 - Aksesi DQ000286 (Borrelia sp. 16S rRNA) yang sebelumnya tersimpan sebagai cladosporium_sample.fasta telah dipindahkan ke data/raw/rejected/.
 
-### Assembly referensi (tidak diunduh)
+### Assembly referensi
 
-- `GCA_001931905.1` — Cladosporium sphaerospermum IMV 00045: Draft genome isolat dari ISS; file genomic.gbff tidak memiliki CDS teranotasi (hanya fitur source).
+- `GCA_001931905.1` — Cladosporium sphaerospermum IMV 00045: Draft genome isolat dari ISS; file genomic.gbff tidak memiliki CDS teranotasi (hanya fitur source). Status NCBI: previous; digantikan oleh GCA_001931905.2.
+- `GCA_001931905.2` — Cladosporium sphaerospermum IMV 00045: Assembly saat ini (current) untuk strain IMV 00045; menggantikan GCA_001931905.1.
 - `GCA_000261425.2` — Cladosporium sphaerospermum UM 843: Assembly scaffold; direktori FTP NCBI tidak menyediakan protein FASTA maupun anotasi gen.
+
+Genome assembly diunduh dan diverifikasi checksum-nya oleh `src/blast_validation.py` sesuai kebutuhan.
 
 ## 4. Analisis Sensitivitas Input Radiasi
 
@@ -139,8 +142,86 @@ Catatan: status `error` (biasanya pada e- = 0 dan energi = 0) berarti kebutuhan 
 
 Sweep ini menunjukkan kondisi ketika input elektron/energi radiasi menjadi faktor pembatas. Nilai adalah estimasi in silico.
 
+## 5. Validasi Homologi Ortholog (tblastn)
+
+- Metode: tblastn protein query vs six-frame translation of genomic assembly nucleotide BLAST database
+- Versi BLAST: `tblastn: 2.17.0+`
+- Parameter: e-value <= 1e-05, max_target_seqs 25, max_hsps 10, SEG yes
+- Total hit mentah: 543
+
+### Ringkasan klasifikasi
+
+| Assembly | Strong | Moderate | Weak | Tidak terdeteksi |
+|---|---|---|---|---|
+| GCA_001931905.1 | 7 | 0 | 0 | 0 |
+| GCA_001931905.2 | 7 | 0 | 0 | 0 |
+| GCA_000261425.2 | 7 | 0 | 0 | 0 |
+
+### Hit terbaik per query
+
+| Query | Gen | GCA_001931905.1 | GCA_001931905.2 | GCA_000261425.2 |
+|---|---|---|---|---|
+| ccla_pks1\|KAN3049821.1 | PKS1 (non-reducing PKS) | strong (92.1%, cov 0.74) | strong (92.1%, cov 0.74) | strong (91.6%, cov 0.74) |
+| ccla_thn_reductase\|KAN3049819.1 | THN reductase | strong (93.9%, cov 0.99) | strong (93.9%, cov 0.99) | strong (92.0%, cov 0.99) |
+| ccla_scytalone_dehydratase\|KAN3063391.1 | Scytalone dehydratase | strong (89.2%, cov 0.91) | strong (89.2%, cov 0.91) | strong (86.9%, cov 0.91) |
+| ccla_laccase\|KAN3060494.1 | Laccase | strong (74.6%, cov 1.00) | strong (74.6%, cov 1.00) | strong (83.9%, cov 0.80) |
+| ccla_tyrosinase\|KAN3055251.1 | Tyrosinase | strong (75.4%, cov 0.99) | strong (75.4%, cov 0.99) | strong (72.4%, cov 0.99) |
+| chal_scytalone_dehydratase\|XP_069226016.1 | Scytalone dehydratase | strong (95.2%, cov 0.91) | strong (95.2%, cov 0.91) | strong (100.0%, cov 0.91) |
+| chal_thn_reductase\|XP_069230222.1 | THN reductase | strong (94.3%, cov 1.00) | strong (94.3%, cov 1.00) | strong (100.0%, cov 1.00) |
+
+Detail subject, koordinat, dan e-value tersedia di `results/blast_validation.json` dan `results/blast_hits.tsv`.
+
+Dari 21 kombinasi query x assembly, 21 menunjukkan hit strong, 0 moderate, 0 weak, dan 0 tidak terdeteksi. Query dengan bukti strong/moderate di setidaknya satu assembly: ccla_laccase|KAN3060494.1, ccla_pks1|KAN3049821.1, ccla_scytalone_dehydratase|KAN3063391.1, ccla_thn_reductase|KAN3049819.1, ccla_tyrosinase|KAN3055251.1, chal_scytalone_dehydratase|XP_069226016.1, chal_thn_reductase|XP_069230222.1. Status ini adalah bukti homologi sekuens, bukan konfirmasi fungsi enzimatik atau ekspresi gen.
+
+### Keterbatasan validasi BLAST
+
+- Tidak adanya hit dapat disebabkan gap assembly, divergensi sekuens, atau query parsial; bukan bukti gen absent.
+- Koordinat subject bersifat spesifik assembly dan tidak dinormalisasi antar assembly.
+- Hasil ini tidak membuktikan ekspresi, aktivitas enzim, atau keterlibatan jalur DHN-melanin.
+- GCA_001931905.1 berstatus previous dan digantikan oleh GCA_001931905.2; keduanya disertakan untuk transparansi.
+
+## 6. Docking Pilot DHN-melanin (AutoDock Vina)
+
+- Status: `completed`
+- Engine: AutoDock Vina v1.2.7; Meeko 0.8.0; RDKit 2026.9.1
+
+> **Catatan:** Reseptor default adalah struktur homolog PDB (1GW0 untuk laccase, 8CG4 untuk PKS1), bukan struktur C. cladosporioides. Skor Vina tidak boleh ditafsirkan sebagai energi ikat target sebenarnya.
+
+### Afinitas terbaik (kcal/mol)
+
+| Reseptor (surrogate) | DHN_monomer | DHN_dimer | DHN_trimer |
+|---|---|---|---|
+| Laccase_surrogate_1GW0 | -5.10 | -3.16 | 2.27 |
+| PKS1_surrogate_8CG4 | -5.91 | -8.89 | -9.66 |
+
+### Ligand efficiency (kcal/mol per heavy atom)
+
+| Reseptor (surrogate) | DHN_monomer | DHN_dimer | DHN_trimer |
+|---|---|---|---|
+| Laccase_surrogate_1GW0 | -0.425 | -0.132 | 0.063 |
+| PKS1_surrogate_8CG4 | -0.493 | -0.370 | -0.268 |
+
+Ligand efficiency = afinitas terbaik / jumlah atom berat. Metrik ini sebagian mengoreksi bias ukuran ligan pada skor Vina.
+
+### Reseptor
+
+| Reseptor | PDB | Target | Identitas / coverage | Sumber pusat kotak |
+|---|---|---|---|---|
+| Laccase_surrogate_1GW0 | 1GW0 | KAN3060494.1 | 44.7% / 91.7% | T1 copper serial 9143 (Cys503 SG, 2.2 A) |
+| PKS1_surrogate_8CG4 | 8CG4 | KAN3049821.1 | 36.4% / 94.7% | SG atom Cys543 (katalitik KS motif DTACSSSL) |
+
+6 dari 6 run docking berhasil. Skor mentah terbaik -9.663 kcal/mol untuk DHN_trimer pada PKS1_surrogate_8CG4; ligand efficiency terbaik -0.493 kcal/mol per heavy atom untuk DHN_monomer pada PKS1_surrogate_8CG4. Skor Vina tidak dinormalisasi terhadap ukuran ligan, sehingga monomer, dimer, dan trimer harus dibandingkan dengan ligand efficiency, bukan skor mentah saja. Semua reseptor adalah surrogate homolog, sehingga angka ini bukan afinitas target C. cladosporioides dan hanya untuk perbandingan internal.
+
+### Keterbatasan docking
+
+- Skor Vina bukan energi bebas ikat eksperimental (bukan ΔG).
+- Tidak ada validasi eksperimental atau simulasi MD untuk pose terbaik.
+- PKS1 mendock DHN sebagai produk, bukan substrat; relevansi biologisnya spekulatif.
+- Model dimer/trimer tidak mewakili heterogenitas melanin alami.
+- Skor Vina tidak dinormalisasi terhadap ukuran ligan; ligan lebih besar cenderung memperoleh skor lebih favorable. Bandingkan ligand efficiency, bukan hanya afinitas mentah.
+- Perbedaan kecil skor (<1 kcal/mol) tidak dapat dianggap signifikan.
+
 ## Artefak yang belum tersedia / opsional
 
 - Semua artefak inti tersedia.
-- `results/docking_results.json` — opsional; modul docking belum diimplementasikan.
-- `data/processed/*_stats.json` — opsional; belum ada data terproses.
+- `data/processed/*_stats.json` — belum ada data terproses.

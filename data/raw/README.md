@@ -24,10 +24,13 @@ Direktori ini berisi sekuens referensi yang diunduh dan divalidasi oleh
 - Target lain adalah ortholog referensi dari Cladosporium cladosporioides dan Cladosporium halotolerans, bukan urutan langsung C. sphaerospermum.
 - Aksesi DQ000286 (Borrelia sp. 16S rRNA) yang sebelumnya tersimpan sebagai cladosporium_sample.fasta telah dipindahkan ke data/raw/rejected/.
 
-## Assembly referensi (tidak diunduh)
+## Assembly referensi
 
-- `GCA_001931905.1` — Cladosporium sphaerospermum IMV 00045: Draft genome isolat dari ISS; file genomic.gbff tidak memiliki CDS teranotasi (hanya fitur source).
+- `GCA_001931905.1` — Cladosporium sphaerospermum IMV 00045: Draft genome isolat dari ISS; file genomic.gbff tidak memiliki CDS teranotasi (hanya fitur source). Status NCBI: previous; digantikan oleh GCA_001931905.2.
+- `GCA_001931905.2` — Cladosporium sphaerospermum IMV 00045: Assembly saat ini (current) untuk strain IMV 00045; menggantikan GCA_001931905.1.
 - `GCA_000261425.2` — Cladosporium sphaerospermum UM 843: Assembly scaffold; direktori FTP NCBI tidak menyediakan protein FASTA maupun anotasi gen.
+
+Genome assembly diunduh dan diverifikasi checksum-nya oleh `src/blast_validation.py` sesuai kebutuhan.
 
 ## Rekaman yang ditolak
 

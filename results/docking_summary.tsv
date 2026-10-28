@@ -1,0 +1,7 @@
+receptor	ligand	status	best_affinity_kcal_mol	ligand_efficiency_kcal_mol_per_heavy_atom	mode1_rmsd_lb	error
+Laccase_surrogate_1GW0	DHN_monomer	ok	-5.102	-0.425	0.0	
+Laccase_surrogate_1GW0	DHN_dimer	ok	-3.163	-0.132	0.0	
+Laccase_surrogate_1GW0	DHN_trimer	ok	2.275	0.063	0.0	
+PKS1_surrogate_8CG4	DHN_monomer	ok	-5.911	-0.493	0.0	
+PKS1_surrogate_8CG4	DHN_dimer	ok	-8.889	-0.37	0.0	
+PKS1_surrogate_8CG4	DHN_trimer	ok	-9.663	-0.268	0.0	

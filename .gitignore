@@ -44,3 +44,11 @@ temp/
 
 # --- Sisa inspeksi manual ---
 .tmp_ncbi_check/
+
+# --- Tool dan genome unduhan (besar, tidak di-commit) ---
+tools/
+data/genomes/
+data/structures/
+data/ligands/
+results/docking/
+results/colab_runs/

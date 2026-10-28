@@ -174,17 +174,28 @@ TARGETS: tuple[FetchTarget, ...] = (
     ),
 )
 
-# Metadata assembly yang relevan. Tidak diunduh otomatis karena tidak memiliki
-# anotasi gen/protein lengkap di NCBI dan ukurannya besar.
+# Metadata assembly yang relevan. Tidak diunduh oleh fetcher karena tidak
+# memiliki anotasi gen/protein lengkap di NCBI dan ukurannya besar; modul
+# blast_validation mengunduh dan memverifikasi checksum sesuai kebutuhan.
 REFERENCE_ASSEMBLIES: tuple[dict[str, str], ...] = (
     {
         "accession": "GCA_001931905.1",
         "organism": "Cladosporium sphaerospermum IMV 00045",
         "description": (
             "Draft genome isolat dari ISS; file genomic.gbff tidak memiliki CDS "
-            "teranotasi (hanya fitur source)."
+            "teranotasi (hanya fitur source). Status NCBI: previous; digantikan "
+            "oleh GCA_001931905.2."
         ),
         "url": "https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_001931905.1/",
+    },
+    {
+        "accession": "GCA_001931905.2",
+        "organism": "Cladosporium sphaerospermum IMV 00045",
+        "description": (
+            "Assembly saat ini (current) untuk strain IMV 00045; menggantikan "
+            "GCA_001931905.1."
+        ),
+        "url": "https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_001931905.2/",
     },
     {
         "accession": "GCA_000261425.2",
@@ -441,13 +452,16 @@ def _write_raw_readme(results: Iterable[dict[str, Any]], path: Path = RAW_README
             "",
             *[f"- {caveat}" for caveat in CAVEATS],
             "",
-            "## Assembly referensi (tidak diunduh)",
+            "## Assembly referensi",
             "",
             *[
                 f"- `{assembly['accession']}` — {assembly['organism']}: "
                 f"{assembly['description']}"
                 for assembly in REFERENCE_ASSEMBLIES
             ],
+            "",
+            "Genome assembly diunduh dan diverifikasi checksum-nya oleh "
+            "`src/blast_validation.py` sesuai kebutuhan.",
             "",
             "## Rekaman yang ditolak",
             "",
