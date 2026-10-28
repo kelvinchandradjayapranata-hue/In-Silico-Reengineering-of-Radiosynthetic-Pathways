@@ -94,6 +94,11 @@ Notebook siap pakai tersedia di `notebooks/docking_colab.ipynb`.
 !bash scripts/run_docking_colab.sh
 ```
 
+Jika repositori masih **privat**, clone publik akan gagal. Pilihan yang aman:
+jadikan repositori public, atau simpan token GitHub read-only di Colab Secrets
+dan set `GITHUB_TOKEN` sebelum menjalankan script (script tidak menyimpan token
+di `.git/config`).
+
 Konfigurasi opsional (set sebagai environment variable sebelum perintah):
 
 - `SEEDS="42 43 44"` — seed Vina; kurangi bila waktu terbatas.

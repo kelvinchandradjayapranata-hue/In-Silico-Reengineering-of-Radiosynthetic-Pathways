@@ -22,6 +22,7 @@
 #   OUTPUT_DIR="/content/drive/MyDrive/melanin_docking_runs"
 #   MOUNT_DRIVE=1             # mount Google Drive sebelum menyalin hasil
 #   SKIP_PULL=1               # lewati git pull
+#   GITHUB_TOKEN="..."        # token read-only bila repo masih privat
 #
 # Contoh:
 #   !SEEDS="42 43" EXHAUSTIVENESS=32 OUTPUT_DIR="/content/drive/MyDrive/melanin_docking_runs" bash scripts/run_docking_colab.sh
@@ -30,6 +31,7 @@
 set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/kelvinchandradjayapranata-hue/In-Silico-Reengineering-of-Radiosynthetic-Pathways.git}"
+GITHUB_TOKEN="${GITHUB_TOKEN:-}"
 WORKDIR="${WORKDIR:-/content/In-Silico-Reengineering-of-Radiosynthetic-Pathways}"
 SEEDS="${SEEDS:-42 43 44}"
 EXHAUSTIVENESS="${EXHAUSTIVENESS:-32}"
@@ -66,13 +68,22 @@ fi
 if [ ! -d "$WORKDIR/.git" ]; then
     mkdir -p "$(dirname "$WORKDIR")"
     echo "[1/5] Meng-clone repository..."
-    git clone "$REPO_URL" "$WORKDIR"
+    CLONE_URL="$REPO_URL"
+    if [ -n "$GITHUB_TOKEN" ]; then
+        # Gunakan token read-only dari Colab Secrets untuk repo privat.
+        CLONE_URL="${REPO_URL/https:\/\/github.com\//https://x-access-token:${GITHUB_TOKEN}@github.com/}"
+    fi
+    git clone "$CLONE_URL" "$WORKDIR"
+    # Jangan simpan token di .git/config.
+    git -C "$WORKDIR" remote set-url origin "$REPO_URL"
 fi
 cd "$WORKDIR"
 
-if [ "$SKIP_PULL" != "1" ]; then
+if [ "$SKIP_PULL" != "1" ] && [ -z "$GITHUB_TOKEN" ]; then
     echo "[1/5] Memperbarui repository (fast-forward)..."
     git pull --ff-only || echo "[WARN] git pull dilewati (tree lokal tidak bersih)."
+elif [ -n "$GITHUB_TOKEN" ]; then
+    echo "[1/5] Melewati git pull (clone privat memakai token)."
 else
     echo "[1/5] Melewati git pull."
 fi
