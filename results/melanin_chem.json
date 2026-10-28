@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-10-28T11:54:59.565757+00:00",
+  "method": "RDKit 2D descriptors; Gasteiger partial charges after explicit hydrogen addition. SMILES diverifikasi terhadap PubChem.",
+  "monomers": {
+    "DHN_monomer_model": {
+      "common_name": "1,8-dihydroxynaphthalene (DHN)",
+      "pubchem_cid": 68438,
+      "source_smiles": "Oc1cccc2cccc(O)c12",
+      "notes": "Monomer model untuk DHN-melanin. Bukan representasi polimer atau interaksi supramolekul.",
+      "canonical_smiles": "Oc1cccc2cccc(O)c12",
+      "formula": "C10H8O2",
+      "molecular_weight_g_mol": 160.17,
+      "logP": 2.25,
+      "tpsa_A2": 40.46,
+      "h_bond_donors": 2,
+      "h_bond_acceptors": 2,
+      "rotatable_bonds": 0,
+      "heavy_atoms": 12,
+      "gasteiger_charge_max": 0.2931,
+      "gasteiger_charge_min": -0.5072
+    },
+    "DOPA_monomer_model": {
+      "common_name": "L-DOPA",
+      "pubchem_cid": 6047,
+      "source_smiles": "N[C@@H](Cc1ccc(O)c(O)c1)C(=O)O",
+      "notes": "Prekursor DOPA-melanin dalam bentuk L. Deskriptor tidak mencakup dopaquinone atau polimer melanin.",
+      "canonical_smiles": "N[C@@H](Cc1ccc(O)c(O)c1)C(=O)O",
+      "formula": "C9H11NO4",
+      "molecular_weight_g_mol": 197.19,
+      "logP": 0.05,
+      "tpsa_A2": 103.78,
+      "h_bond_donors": 4,
+      "h_bond_acceptors": 4,
+      "rotatable_bonds": 3,
+      "heavy_atoms": 14,
+      "gasteiger_charge_max": 0.3203,
+      "gasteiger_charge_min": -0.5043
+    }
+  },
+  "assumptions": [
+    "DHN direpresentasikan sebagai monomer 1,8-dihydroxynaphthalene, bukan polimer.",
+    "DOPA direpresentasikan sebagai L-DOPA, prekursor DOPA-melanin.",
+    "Muatan Gasteiger dihitung setelah penambahan hidrogen eksplisit.",
+    "Deskriptor 2D tidak menangkap polimerisasi, agregasi, atau konformasi 3D.",
+    "Semua nilai adalah estimasi in silico, bukan hasil pengukuran eksperimental."
+  ]
+}

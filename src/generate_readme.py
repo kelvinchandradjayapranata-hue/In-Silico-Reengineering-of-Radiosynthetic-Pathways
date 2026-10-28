@@ -1,0 +1,238 @@
+"""Generate README.md dari status artefak proyek."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Sequence
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+README_PATH = PROJECT_ROOT / "README.md"
+RESULTS_DIR = PROJECT_ROOT / "results"
+RAW_DIR = PROJECT_ROOT / "data" / "raw"
+
+EVIDENCE_LABELS = {
+    "direct_sequence": "urutan langsung",
+    "ortholog_reference": "ortholog referensi",
+}
+
+
+def _read_json(path: Path) -> dict[str, Any] | None:
+    if not path.is_file():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _provenance_table(manifest: dict[str, Any] | None) -> str:
+    if not manifest or not manifest.get("targets"):
+        return (
+            "Belum ada manifest data. Jalankan `python src/ncbi_fetcher.py --targets all`."
+        )
+
+    lines = [
+        "| Target | Gen | Aksesi | Organisme | Level bukti |",
+        "|---|---|---|---|---|",
+    ]
+    for target in manifest["targets"]:
+        evidence = EVIDENCE_LABELS.get(
+            target.get("evidence_level", ""), target.get("evidence_level", "-")
+        )
+        lines.append(
+            "| {target_id} | {gene} | {accession} | {organism} | {evidence} |".format(
+                target_id=target.get("target_id", "-"),
+                gene=target.get("gene", "-"),
+                accession=target.get("accession", "-"),
+                organism=target.get("expected_organism", "-"),
+                evidence=evidence,
+            )
+        )
+    return "\n".join(lines)
+
+
+def _status_line(fba: dict[str, Any] | None) -> str:
+    if not fba:
+        return "FBA belum dijalankan."
+    pathway = fba.get("pathway_fluxes", {})
+    return (
+        f"FBA `{fba.get('status', 'unknown')}`; DHN-melanin export "
+        f"{pathway.get('dhn_melanin_export', 0):.3f}, DOPA-melanin export "
+        f"{pathway.get('dopa_melanin_export', 0):.3f}."
+    )
+
+
+def build_readme() -> str:
+    """Bangun isi README berdasarkan manifest dan hasil FBA jika tersedia."""
+    manifest = _read_json(RAW_DIR / "manifest.json")
+    fba = _read_json(RESULTS_DIR / "metabolic_fba.json")
+    chem = _read_json(RESULTS_DIR / "melanin_chem.json")
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    caveats = manifest.get("caveats", []) if manifest else []
+    caveat_lines = "\n".join(f"- {item}" for item in caveats) if caveats else (
+        "- Belum ada manifest data NCBI."
+    )
+
+    chem_status = (
+        "tersedia"
+        if chem and chem.get("monomers")
+        else "belum dijalankan"
+    )
+
+    return f"""# In Silico Reengineering of Radiosynthetic Pathways
+
+**AI-Driven Bio-Computational Framework for Cosmic Radiation Energy Conversion Using Fungal Melanin Templates**
+
+> README dibuat otomatis oleh `src/generate_readme.py` pada {generated}.
+> Proyek ini masih tahap eksplorasi komputasi; semua hasil adalah estimasi in silico.
+
+## Abstrak
+
+Proyek ini mengeksplorasi kerangka kerja komputasi untuk mempelajari hipotesis
+interaksi antara melanin jamur, protein, dan jalur metabolik
+(*Cladosporium sphaerospermum*). Fokus awal ada pada jalur DHN-melanin dan
+DOPA-melanin, konversi energi radiasi menjadi ATP/NADPH, dan simulator
+stoikiometri tereduksi.
+
+## Status Saat Ini
+
+- Pipeline dasar: berjalan end-to-end.
+- Simulasi FBA: {_status_line(fba)}
+- Deskriptor monomer: {chem_status}.
+- Data NCBI: tervalidasi terhadap organisme dan kata kunci; lihat bagian
+  **Data dan Provenance**.
+
+## Arsitektur Pipeline
+
+1. **`src/ncbi_fetcher.py`** — mengambil dan memvalidasi FASTA dari NCBI.
+2. **`src/melanin_chem.py`** — menghitung deskriptor RDKit monomer DHN/L-DOPA.
+3. **`src/metabolic_fba.py`** — model FBA tereduksi jalur DHN/DOPA + input radiasi.
+4. **`src/visualization.py`** — grafik fluks ke `results/plots/fba_fluxes.png`.
+5. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
+6. **`src/run_pipeline.py`** — orkestrasi semua tahap.
+
+## Quickstart (Windows PowerShell)
+
+```powershell
+python -m venv venv
+.\\venv\\Scripts\\Activate.ps1
+pip install -r requirements.txt
+
+# Unduh data NCBI (butuh jaringan; set NCBI_EMAIL agar sesuai kebijakan NCBI)
+$env:NCBI_EMAIL = "nama@institusi.ac.id"
+python src/ncbi_fetcher.py --targets all
+
+# Jalankan pipeline tanpa mengunduh ulang
+python src/run_pipeline.py --skip-fetch
+```
+
+Perintah manual per tahap:
+
+```powershell
+python src/melanin_chem.py
+python src/metabolic_fba.py --sensitivity
+python src/visualization.py
+python src/generate_report.py
+python src/generate_readme.py
+```
+
+## Data dan Provenance
+
+{_provenance_table(manifest)}
+
+### Catatan ilmiah
+
+{caveat_lines}
+
+Detail checksum dan metadata ada di `data/raw/manifest.json`. Manifest
+membedakan **urutan langsung** dari *C. sphaerospermum* dan **ortholog
+referensi** dari spesies *Cladosporium* lain.
+
+## Asumsi dan Keterbatasan Model FBA
+
+- Model adalah stoikiometri tereduksi, bukan genome-scale model.
+- Jalur DHN: 1 acetyl-CoA + 4 malonyl-CoA -> THN, lalu 2 NADPH per DHN.
+- Jalur DOPA: L-tyrosine -> L-DOPA -> dopaquinone -> DOPA-melanin.
+- Radiasi dimodelkan sebagai input elektron (-> NADH) dan energi (-> ATP),
+  bukan model fotokimia/kuantum.
+- Koenzim seperti CoA dan H+ dihilangkan; neraca massa/charge tidak lengkap.
+- Reaksi biomassa dan ATP maintenance adalah placeholder, bukan parameter
+  terukur untuk *C. sphaerospermum*.
+- Modul docking molekuler belum diimplementasikan; `results/docking_results.json`
+  belum tersedia.
+- Hasil FBA adalah estimasi in silico, bukan bukti eksperimental.
+
+## Output
+
+- `results/metabolic_fba.json` — hasil FBA lengkap.
+- `results/fba_sensitivity.json` — sweep batas elektron/energi radiasi.
+- `results/melanin_chem.json` — deskriptor monomer.
+- `results/plots/fba_fluxes.png` — grafik fluks.
+- `results/summary_report.md` — laporan ringkasan.
+- `models/melanin_radiosynthesis_fba_v2.xml` — model SBML.
+
+## Struktur Direktori
+
+```text
+melanin-biotech/
+├── data/
+│   ├── raw/                 # FASTA NCBI + manifest + rejected/
+│   └── processed/           # data hasil pemrosesan (opsional)
+├── models/                  # model SBML
+├── results/
+│   ├── plots/
+│   ├── metabolic_fba.json
+│   ├── fba_sensitivity.json
+│   ├── melanin_chem.json
+│   └── summary_report.md
+├── src/
+│   ├── ncbi_fetcher.py
+│   ├── melanin_chem.py
+│   ├── metabolic_fba.py
+│   ├── visualization.py
+│   ├── generate_report.py
+│   ├── generate_readme.py
+│   └── run_pipeline.py
+├── docs/                    # catatan proyek dan roadmap
+├── notebooks/               # placeholder notebook eksplorasi
+├── tests/                   # placeholder test suite (belum ada test otomatis)
+├── .gitignore
+├── requirements.txt
+└── README.md
+```
+
+## Disclaimer Ilmiah
+
+Semua angka dalam proyek ini adalah estimasi komputasi. Validasi eksperimental
+tetap diperlukan sebelum klaim biologis atau aplikasi rekayasa apa pun.
+"""
+
+
+def generate_readme(output_path: Path | None = None) -> Path:
+    destination = Path(output_path) if output_path else README_PATH
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = destination.with_suffix(destination.suffix + ".tmp")
+    temp_path.write_text(build_readme(), encoding="utf-8")
+    temp_path.replace(destination)
+    return destination
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Generate README.md proyek.")
+    parser.add_argument("--output", type=Path, default=README_PATH)
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    path = generate_readme(args.output)
+    print(f"[SUCCESS] README ditulis ke: {path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

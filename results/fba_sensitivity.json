@@ -1,0 +1,273 @@
+{
+  "generated_at": "2026-10-28T11:54:59.932920+00:00",
+  "electron_limits": [
+    0.0,
+    2.5,
+    5.0,
+    7.5,
+    10.0
+  ],
+  "energy_limits": [
+    0.0,
+    2.5,
+    5.0,
+    7.5,
+    10.0
+  ],
+  "model_parameters": {
+    "glucose_limit": 5.0,
+    "oxygen_limit": 20.0,
+    "tyrosine_limit": 1.0,
+    "atp_maintenance": 10.0,
+    "biomass_requirement": 0.1
+  },
+  "rows": [
+    {
+      "electron_limit": 0.0,
+      "energy_limit": 0.0,
+      "status": "error",
+      "error": "FBA tidak optimal (status: infeasible). Periksa batas input dan kebutuhan ATP/biomassa."
+    },
+    {
+      "electron_limit": 0.0,
+      "energy_limit": 2.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 0.0,
+      "energy_limit": 5.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 0.0,
+      "energy_limit": 7.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 0.0,
+      "energy_limit": 10.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 2.5,
+      "energy_limit": 0.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 2.42,
+      "radiation_energy_used": 0.0
+    },
+    {
+      "electron_limit": 2.5,
+      "energy_limit": 2.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 2.5,
+      "energy_limit": 5.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 2.5,
+      "energy_limit": 7.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 2.5,
+      "energy_limit": 10.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 5.0,
+      "energy_limit": 0.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 2.42,
+      "radiation_energy_used": 0.0
+    },
+    {
+      "electron_limit": 5.0,
+      "energy_limit": 2.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 5.0,
+      "energy_limit": 5.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 5.0,
+      "energy_limit": 7.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 5.0,
+      "energy_limit": 10.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 7.5,
+      "energy_limit": 0.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 2.42,
+      "radiation_energy_used": 0.0
+    },
+    {
+      "electron_limit": 7.5,
+      "energy_limit": 2.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 7.5,
+      "energy_limit": 5.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 7.5,
+      "energy_limit": 7.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 7.5,
+      "energy_limit": 10.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 10.0,
+      "energy_limit": 0.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 2.42,
+      "radiation_energy_used": 0.0
+    },
+    {
+      "electron_limit": 10.0,
+      "energy_limit": 2.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 10.0,
+      "energy_limit": 5.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 10.0,
+      "energy_limit": 7.5,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    },
+    {
+      "electron_limit": 10.0,
+      "energy_limit": 10.0,
+      "status": "optimal",
+      "objective_value": 2.92,
+      "dhn_melanin_export": 1.92,
+      "dopa_melanin_export": 1.0,
+      "radiation_electron_used": 0.0,
+      "radiation_energy_used": 2.42
+    }
+  ],
+  "interpretation": "Sweep ini menunjukkan kondisi ketika input elektron/energi radiasi menjadi faktor pembatas. Nilai adalah estimasi in silico."
+}

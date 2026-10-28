@@ -1,0 +1,113 @@
+{
+  "model": "melanin_radiosynthesis_fba_v2",
+  "model_version": "2.0",
+  "status": "optimal",
+  "objective": {
+    "name": "total_melanin_export",
+    "weights": {
+      "MELANIN_DHN_EXPORT": 1.0,
+      "MELANIN_DOPA_EXPORT": 1.0
+    },
+    "value": 2.92
+  },
+  "objective_value": 2.92,
+  "inputs": {
+    "glucose_uptake_limit": 5.0,
+    "oxygen_uptake_limit": 20.0,
+    "tyrosine_uptake_limit": 1.0,
+    "radiation_electron_limit": 10.0,
+    "radiation_energy_limit": 10.0,
+    "atp_maintenance": 10.0,
+    "biomass_requirement": 0.1
+  },
+  "fluxes": {
+    "EX_GLC": 5.0,
+    "GLYCOLYSIS": 4.9,
+    "ACCARBOXYLASE": 7.68,
+    "PKS_THN": 1.92,
+    "MELANIN_DHN_EXPORT": 1.92,
+    "TYROSINASE_CRESOLASE": 1.0,
+    "MELANIN_DOPA_EXPORT": 1.0,
+    "RESPIRATION": 2.98,
+    "TRANS_HYDROGENASE": 3.84,
+    "RAD_ELECTRON_IN": 0.0,
+    "RAD_ENERGY_IN": 2.42,
+    "ATPM": 10.0,
+    "BIOMASS": 0.1
+  },
+  "all_fluxes": {
+    "EX_GLC": 5.0,
+    "EX_O2": 3.95,
+    "EX_TYR": 1.0,
+    "GLYCOLYSIS": 4.9,
+    "PPP": 0.1,
+    "PPP_EXPORT": 0.0,
+    "ACCARBOXYLASE": 7.68,
+    "PKS_THN": 1.92,
+    "THN_REDUCTASE": 1.92,
+    "SCYTALONE_DEHYDRATASE": 1.92,
+    "T3HN_REDUCTASE": 1.92,
+    "VERMELONE_DEHYDRATASE": 1.92,
+    "LACCASE_DHN": 1.92,
+    "MELANIN_DHN_EXPORT": 1.92,
+    "TYROSINASE_CRESOLASE": 1.0,
+    "TYROSINASE_CATECHOLASE": 1.0,
+    "DOPA_MELANIN_FORMATION": 1.0,
+    "MELANIN_DOPA_EXPORT": 1.0,
+    "RESPIRATION": 2.98,
+    "TRANS_HYDROGENASE": 3.84,
+    "ATPM": 10.0,
+    "BIOMASS": 0.1,
+    "BIOMASS_EXPORT": 0.1,
+    "RAD_ELECTRON_IN": 0.0,
+    "RAD_ENERGY_IN": 2.42,
+    "RAD_NADH_SYN": 0.0,
+    "RAD_ATP_SYN": 2.42,
+    "CO2_EX": 9.9,
+    "H2O_EX": 15.84
+  },
+  "pathway_fluxes": {
+    "dhn_melanin_export": 1.92,
+    "dopa_melanin_export": 1.0,
+    "total_melanin_export": 2.92
+  },
+  "yields": {
+    "dhn_melanin_per_glucose": 0.384,
+    "dhn_melanin_per_radiation_electron": 0.0,
+    "dhn_melanin_per_radiation_energy": 0.793388,
+    "dopa_melanin_per_tyrosine": 1.0
+  },
+  "balance": {
+    "glucose_used": 5.0,
+    "oxygen_used": 3.95,
+    "tyrosine_used": 1.0,
+    "co2_exported": 9.9,
+    "radiation_electron_used": 0.0,
+    "radiation_energy_used": 2.42,
+    "radiation_atp_produced": 2.42,
+    "radiation_atp_share_of_demand": 0.133113
+  },
+  "binding_constraints": [
+    "Glucose uptake mencapai batas atas (5)",
+    "Tyrosine uptake mencapai batas atas (1)"
+  ],
+  "warnings": [
+    "Input elektron radiasi tidak terpakai; NADH dari glikolisis dan PPP cukup untuk kebutuhan redoks."
+  ],
+  "assumptions": [
+    "Model adalah stoikiometri tereduksi, bukan genome-scale model.",
+    "1 acetyl-CoA + 4 malonyl-CoA menghasilkan 1 THN (PKS non-reducing, lumped).",
+    "Jalur DHN: 2 NADPH per DHN (THN reductase dan 1,3,8-THN reductase).",
+    "1 ATP dan 1 CO2 dikonsumsi per malonyl-CoA (acetyl-CoA carboxylase).",
+    "1 glucose -> 2 acetyl-CoA + 2 NADH + 2 ATP + 2 CO2 (glycolysis lumped).",
+    "1 glucose -> 1 pentose phosphate + 2 NADPH + 1 CO2 (PPP oksidatif lumped).",
+    "Respirasi lumped: 2 NADH + 0.5 O2 -> 2 NAD+ + 2 ATP (P/O = 1).",
+    "Radiasi dimodelkan sebagai input elektron (-> NADH) dan energi (-> ATP), bukan model fotokimia/kuantum.",
+    "Koenzim seperti CoA dan H+ dihilangkan; neraca massa/charge tidak lengkap.",
+    "Reaksi biomassa adalah placeholder, bukan komposisi biomassa terukur.",
+    "Jalur DOPA adalah reaksi tyrosinase + polimerisasi yang dilumpukan.",
+    "Semua hasil adalah estimasi in silico, bukan validasi eksperimental."
+  ],
+  "interpretation": "Model stoikiometri tereduksi untuk eksplorasi kualitatif konversi energi radiasi menjadi ATP/NADPH dan biosintesis melanin.",
+  "generated_at": "2026-10-28T11:54:59.587239+00:00"
+}

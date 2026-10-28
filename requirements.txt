@@ -1,0 +1,7 @@
+# Versi dipin dari venv proyek (Python 3.12) untuk reproduksibilitas.
+biopython==1.88
+cobra==0.32.1
+rdkit==2026.9.1
+matplotlib==3.11.2
+pandas==2.3.3
+numpy==2.5.4
