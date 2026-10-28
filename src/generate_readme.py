@@ -196,6 +196,47 @@ python scripts/aggregate_docking_seeds.py \
 """
 
 
+def _interaction_section() -> str:
+    return r"""## Analisis Interaksi dan Viewer 3D
+
+Setelah pose PDBQT tersedia (lokal atau hasil unduhan dari Colab):
+
+```bash
+# Peta interaksi DHN monomer pada semua reseptor
+python src/analyze_interactions.py --ligand DHN_monomer
+
+# Viewer 3D interaktif (HTML mandiri; 3Dmol.js dari CDN)
+python src/visualize_pose.py --interactions results/interactions.json
+```
+
+`analyze_interactions.py` mendukung JSON single-seed maupun agregasi
+multi-seed. Script memilih pose terbaik yang dirujuk JSON, lalu menulis:
+
+- `results/interactions.json` — detail semua kontak dan koordinat untuk viewer;
+- `results/interactions.tsv` — tabel datar untuk analisis lanjutan;
+- `results/interactions.md` — ringkasan per kompleks.
+
+`visualize_pose.py` menulis satu HTML per kompleks dan `index.html` ke
+`results/visualization/` (di-ignore Git). Viewer memuat 3Dmol.js dari CDN,
+jadi perlu koneksi internet saat dibuka. Kontrol tersedia untuk rotasi,
+spin, surface pocket, dan menyembunyikan garis kontak.
+
+Kriteria default:
+
+- H-bond: jarak donor-akseptor <=3.5 Å dan sudut D-H...A >=120°.
+- Kontak hidrofobik: karbon side chain protein dengan karbon ligan <=4.0 Å.
+- Pi-pi: centroid ring <=5.5 Å; kandidat parallel-displaced/T-shaped offset
+  dengan centroid <=6.5 Å dan jarak atom-terdekat <=4.0 Å.
+
+Reseptor laccase 1GW0 tidak memiliki atom H pada PDB bersih, sehingga sudut
+H-bond tidak dapat dihitung; kontak polar yang cocok dilaporkan sebagai
+kandidat `distance_only`. Untuk analisis produksi, tambahkan hidrogen dengan
+PDBFixer/Reduce atau protonasi dengan PROPKA/H++ dan verifikasi dengan
+PLIP/Arpeggio. Peta ini bersifat geometris, bukan energi ikat; validasi
+memerlukan MD/MM-PBSA dan data eksperimental.
+"""
+
+
 def build_readme() -> str:
     """Bangun isi README berdasarkan manifest dan hasil FBA jika tersedia."""
     manifest = _read_json(RAW_DIR / "manifest.json")
@@ -251,8 +292,12 @@ stoikiometri tereduksi.
    *C. sphaerospermum*.
 6. **`src/melanin_docking.py`** — docking pilot DHN ke struktur homolog
    PKS1/laccase dengan AutoDock Vina.
-7. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
-8. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
+7. **`src/analyze_interactions.py`** — peta H-bond, kontak hidrofobik, dan
+   pi-pi dari pose terbaik.
+8. **`src/visualize_pose.py`** — viewer 3D interaktif pose ligan di kantung
+   aktif (HTML + 3Dmol.js).
+9. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
+10. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
 
 ## Quickstart (Windows PowerShell)
 
@@ -286,6 +331,10 @@ python src/blast_validation.py
 
 # Opsional: docking pilot (butuh Meeko dan binary AutoDock Vina)
 python src/melanin_docking.py
+
+# Peta interaksi dan viewer 3D dari pose yang tersedia
+python src/analyze_interactions.py --ligand DHN_monomer
+python src/visualize_pose.py --interactions results/interactions.json
 ```
 
 Catatan tool opsional:
@@ -298,6 +347,8 @@ Catatan tool opsional:
   `data/structures/`. Keduanya di-ignore Git karena berukuran besar.
 
 {_colab_section()}
+
+{_interaction_section()}
 
 ## Data dan Provenance
 
@@ -342,6 +393,10 @@ referensi** dari spesies *Cladosporium* lain.
   spekulatif.
 - Skor Vina tidak dinormalisasi terhadap ukuran ligan; bandingkan ligand
   efficiency, bukan hanya afinitas mentah.
+- Peta interaksi memakai kriteria geometris (jarak/sudut), bukan energi
+  ikat; hasilnya perlu diverifikasi dengan PLIP/Arpeggio dan MD/MM-PBSA.
+- Laccase 1GW0 tidak memiliki hidrogen pada PDB bersih; sebagian H-bond hanya
+  dapat dilaporkan sebagai kandidat distance-only.
 - Tidak ada validasi eksperimental atau simulasi MD untuk pose docking.
 - Semua hasil komputasi memerlukan validasi eksperimental.
 
@@ -356,6 +411,10 @@ referensi** dari spesies *Cladosporium* lain.
 - `results/blast/<assembly>.tsv` — hit tblastn per assembly.
 - `results/docking_results.json` — hasil lengkap docking pilot.
 - `results/docking_summary.tsv` — ringkasan afinitas docking.
+- `results/interactions.json` — peta H-bond/hidrofobik/pi-pi.
+- `results/interactions.tsv` — tabel interaksi untuk analisis lanjutan.
+- `results/interactions.md` — ringkasan interaksi per kompleks.
+- `results/visualization/index.html` — viewer 3D (di-ignore Git).
 - `results/summary_report.md` — laporan ringkasan.
 - `models/melanin_radiosynthesis_fba_v2.xml` — model SBML.
 
@@ -381,6 +440,10 @@ melanin-biotech/
 │   ├── blast_hits.tsv
 │   ├── docking_results.json
 │   ├── docking_summary.tsv
+│   ├── interactions.json
+│   ├── interactions.tsv
+│   ├── interactions.md
+│   ├── visualization/       # HTML viewer 3D (di-ignore)
 │   └── summary_report.md
 ├── src/
 │   ├── ncbi_fetcher.py
@@ -389,6 +452,8 @@ melanin-biotech/
 │   ├── visualization.py
 │   ├── blast_validation.py
 │   ├── melanin_docking.py
+│   ├── analyze_interactions.py
+│   ├── visualize_pose.py
 │   ├── generate_report.py
 │   ├── generate_readme.py
 │   └── run_pipeline.py
