@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -73,9 +74,9 @@ class MarcusResult:
             "coupling_cm1": _round(self.coupling_ev * CM1_PER_EV),
             "temperature_k": _round(self.temperature_k),
             "thermal_energy_ev": _round(KB_EV_PER_K * self.temperature_k),
-            "prefactor_s_inv": _round(self.prefactor_s_inv),
-            "exponential_factor": _round(self.exponential_factor),
-            "rate_s_inv": _round(self.rate_s_inv),
+            "prefactor_s_inv": _scientific(self.prefactor_s_inv),
+            "exponential_factor": _scientific(self.exponential_factor),
+            "rate_s_inv": _scientific(self.rate_s_inv),
             "log10_rate_s_inv": _round(log10_rate)
             if log10_rate is not None
             else None,
@@ -88,6 +89,11 @@ def _now() -> str:
 
 def _round(value: float, digits: int = 6) -> float:
     return round(float(value), digits)
+
+
+def _scientific(value: float, digits: int = 6) -> float:
+    """Bulatkan ke digit signifikan agar laju sangat kecil tidak jadi 0."""
+    return float(f"{float(value):.{digits}e}")
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -132,6 +138,10 @@ def marcus_rate(
     )
     exponential = math.exp(-activation / thermal)
     rate = prefactor * exponential
+    if not math.isfinite(prefactor) or not math.isfinite(rate):
+        raise MarcusError(
+            "Hasil laju tidak hingga; periksa coupling dan lambda."
+        )
     return MarcusResult(
         delta_g_ev=float(delta_g_ev),
         lambda_inner_ev=0.0,
@@ -256,7 +266,7 @@ def four_point_reorganization(data: dict[str, Any]) -> dict[str, Any]:
     lambda_acceptor = (a_an - a_aa) + (a_na - a_nn)
     if lambda_donor < -1e-6 or lambda_acceptor < -1e-6:
         raise MarcusError(
-            "λ four-point negatif; periksa konsistensi level teori dan "
+            "lambda four-point negatif; periksa konsistensi level teori dan "
             "koreksi ZPE/solvasi."
         )
     lambda_donor = max(0.0, lambda_donor)
@@ -313,7 +323,11 @@ def _resolve_four_point(
 def _build_result(
     args: argparse.Namespace,
 ) -> tuple[MarcusResult, dict[str, Any], list[str]]:
-    config = _read_json(Path(args.config).expanduser().resolve()) if args.config else {}
+    config = (
+        _read_json(Path(args.config).expanduser().resolve())
+        if args.config
+        else {}
+    )
     warnings: list[str] = []
 
     delta_g = _get(args, config, "delta_g_ev", "delta_g_ev")
@@ -325,6 +339,8 @@ def _build_result(
     n_electrons = int(
         1 if n_electrons_value is None else n_electrons_value
     )
+    if n_electrons < 1:
+        raise MarcusError("n_electrons harus >= 1.")
     if delta_g is None:
         if donor_e0 is None or acceptor_e0 is None:
             raise MarcusError(
@@ -345,7 +361,7 @@ def _build_result(
     delta_g = float(delta_g)
     if n_electrons != 1:
         warnings.append(
-            f"n_electrons={n_electrons} hanya dipakai untuk ΔG°; persamaan "
+            f"n_electrons={n_electrons} hanya dipakai untuk delta-G; persamaan "
             "Marcus yang dihitung tetap satu-elektron."
         )
 
@@ -425,15 +441,17 @@ def _build_result(
 
     coupling_raw = _get(args, config, "coupling", "coupling_ev")
     if coupling_raw is None:
-        coupling_raw = _get(args, config, "coupling_ev", "coupling_ev")
+        coupling_raw = config.get("coupling")
     if coupling_raw is None:
         raise MarcusError("Berikan --coupling (eV/meV/cm-1).")
     coupling_unit = _get(
         args, config, "coupling_unit", "coupling_unit", "eV"
     )
     coupling = _coupling_to_ev(float(coupling_raw), str(coupling_unit))
+    if not math.isfinite(coupling):
+        raise MarcusError("Coupling harus berupa angka hingga.")
     if coupling < 0:
-        warnings.append("Coupling negatif; yang dipakai adalah |H_AB|².")
+        warnings.append("Coupling negatif; yang dipakai adalah |H_AB|^2.")
         coupling = abs(coupling)
     if coupling == 0:
         warnings.append("H_AB = 0; laju Marcus menjadi nol.")
@@ -657,6 +675,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    # Hindari crash UnicodeEncodeError saat console Windows memakai cp1252.
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(errors="replace")
+        except Exception:
+            pass
+
     parser = build_parser()
     args = parser.parse_args(argv)
 

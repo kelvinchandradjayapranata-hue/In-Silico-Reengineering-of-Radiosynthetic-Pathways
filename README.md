@@ -96,7 +96,9 @@ python src/analyze_md_trajectory.py --system-dir results/md_prep/PKS1_surrogate_
 
 # Estimasi laju transfer elektron Marcus dari parameter DFT/MD
 python src/marcus_electron_transfer.py --self-test
-python src/marcus_electron_transfer.py   --delta-g-ev -0.18 --lambda-inner-ev 0.45 --lambda-outer-ev 0.85   --coupling 1.0 --coupling-unit meV
+python src/marcus_electron_transfer.py \
+  --delta-g-ev -0.18 --lambda-inner-ev 0.45 --lambda-outer-ev 0.85 \
+  --coupling 1.0 --coupling-unit meV
 ```
 
 Catatan tool opsional:

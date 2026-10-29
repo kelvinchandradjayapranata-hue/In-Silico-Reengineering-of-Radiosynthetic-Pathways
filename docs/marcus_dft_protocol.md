@@ -263,6 +263,25 @@ k_ET = (2π/ħ) |H_AB|² / sqrt(4π λ k_B T)
        × exp[−(ΔG° + λ)² / (4 λ k_B T)]
 ```
 
+Jika `−ΔG° > λ`, sistem berada di **inverted region**: laju menurun lagi
+ketika driving force bertambah. Ini adalah perilaku fisik Marcus, bukan
+kesalahan numerik; pastikan tanda ΔG° dan definisi donor/akseptor benar.
+
+Jika ada mode vibrasi frekuensi tinggi (mis. C=O atau C–H) yang tidak
+termodulasi pelarut, gunakan Marcus–Levich–Jortner:
+
+```text
+k_MLJ = (2π/ħ) |H_AB|² / sqrt(4π λ_s k_B T)
+        × Σ_n (e^−S S^n / n!)
+        × exp[−(ΔG° + λ_s + n ħω)² / (4 λ_s k_B T)]
+S = λ_v / (ħω)
+```
+
+`λ_s` adalah reorganisasi outer-sphere/pelarut dan `λ_v` adalah reorganisasi
+mode kuantum. Skrip `marcus_electron_transfer.py` memakai bentuk klasik;
+untuk MLJ, hitung suku-suku `n` secara terpisah atau gunakan skrip analisis
+sendiri.
+
 Contoh parameter langsung:
 
 ```bash
@@ -325,6 +344,9 @@ Semua parameter juga bisa diletakkan di satu file config:
 ```bash
 python src/marcus_electron_transfer.py --config data/quantum/marcus_config.json
 ```
+
+Dalam config, `coupling_ev` selalu dalam eV; gunakan `coupling` bersama
+`coupling_unit` (`eV`, `meV`, `cm-1`) untuk satuan lain.
 
 Output default: `results/marcus_electron_transfer.json` dan
 `results/marcus_electron_transfer.md`. Gunakan `--json`/`--md` untuk path lain.
