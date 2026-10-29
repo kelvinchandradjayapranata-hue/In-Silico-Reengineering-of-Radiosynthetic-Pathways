@@ -52,3 +52,5 @@ data/structures/
 data/ligands/
 results/docking/
 results/colab_runs/
+results/visualization/
+results/md_prep/

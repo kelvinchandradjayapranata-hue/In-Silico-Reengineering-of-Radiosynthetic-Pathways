@@ -37,8 +37,12 @@ stoikiometri tereduksi.
    pi-pi dari pose terbaik.
 8. **`src/visualize_pose.py`** — viewer 3D interaktif pose ligan di kantung
    aktif (HTML + 3Dmol.js).
-9. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
-10. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
+9. **`src/cluster_poses.py`** — klastering pose multi-seed berdasarkan RMSD
+   di frame reseptor.
+10. **`src/prepare_openmm_md.py`** — preparasi sistem protein-ligan tersolvasi
+    untuk MD OpenMM eksplisit.
+11. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
+12. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
 
 ## Quickstart (Windows PowerShell)
 
@@ -76,6 +80,12 @@ python src/melanin_docking.py
 # Peta interaksi dan viewer 3D dari pose yang tersedia
 python src/analyze_interactions.py --ligand DHN_monomer
 python src/visualize_pose.py --interactions results/interactions.json
+
+# Klastering pose RMSD (tanpa superposisi, frame reseptor)
+python src/cluster_poses.py --ligand DHN_monomer
+
+# Preparasi MD OpenMM (butuh OpenMM/OpenFF; jalankan di Colab/Linux)
+python src/prepare_openmm_md.py --ligand DHN_monomer
 ```
 
 Catatan tool opsional:
@@ -177,6 +187,74 @@ PLIP/Arpeggio. Peta ini bersifat geometris, bukan energi ikat; validasi
 memerlukan MD/MM-PBSA dan data eksperimental.
 
 
+## Klastering Pose (RMSD)
+
+```bash
+# Klaster DHN monomer pada semua reseptor (cutoff 2.0 Å)
+python src/cluster_poses.py --ligand DHN_monomer
+
+# Semua ligan, average linkage (lebih longgar; lihat caveat)
+python src/cluster_poses.py --ligand all --linkage average
+```
+
+RMSD dihitung pada koordinat pose di **frame reseptor tanpa superposisi** dan
+dikoreksi automorfisme graph RDKit. Superposisi ligan rigid seperti DHN akan
+memberi RMSD ~0 untuk semua pose, sehingga mode `aligned` hanya disediakan
+untuk diagnostik. Pengelompokan default memakai complete linkage agar setiap
+pasangan dalam klaster berada <= cutoff.
+
+Output:
+
+- `results/pose_clusters.json` — klaster, populasi, afinitas, ligand
+  efficiency, dan daftar anggota;
+- `results/pose_clusters.tsv` — tabel ringkas per klaster;
+- `results/pose_clusters.md` — ringkasan per kompleks.
+
+Populasi klaster adalah frekuensi mode Vina yang dijalankan, bukan populasi
+Boltzmann atau bukti kestabilan termodinamika.
+
+
+## Preparasi MD OpenMM (Colab/Linux)
+
+Modul ini hanya menyiapkan sistem; simulasi produksi harus dijalankan di
+Colab/Linux, bukan CPU lokal. Dependency berat dipisahkan di
+`requirements-md.txt`:
+
+```bash
+python -m pip install -r requirements-md.txt
+```
+
+Preparasi sistem protein-ligan tersolvasi:
+
+```bash
+# Dry-run: validasi pose dan metadata tanpa membangun system
+python src/prepare_openmm_md.py --ligand DHN_monomer --dry-run
+
+# Bangun system untuk semua reseptor DHN monomer
+python src/prepare_openmm_md.py --ligand DHN_monomer
+```
+
+Alur default: PDBFixer membuang heterogen non-air, menambahkan atom hilang dan
+hidrogen pada pH 7.4, lalu `Modeller.addSolvent` menambahkan air TIP3P dan ion
+Na+/Cl- pada 0.15 M. Protein memakai Amber ff14SB, ligan diparameterisasi
+dengan OpenFF (`openff-2.2.1`, fallback ke versi sebelumnya) melalui
+`openmmforcefields`; GAFF tersedia sebagai alternatif.
+
+Setiap sistem ditulis ke `results/md_prep/<reseptor>__<ligan>/` (di-ignore Git)
+berisi `system.xml`, `system.pdb`, `state.xml`, `md_config.json`, `run_md.py`,
+`run_colab.sh`, dan `README.md`. Jalankan di Colab:
+
+```bash
+bash results/md_prep/PKS1_surrogate_8CG4__DHN_monomer/run_colab.sh
+```
+
+Runner menjalankan minimisasi, NVT 0.25 ns, NPT 0.25 ns, lalu produksi 10 ns
+(timestep 2 fs; DCD, CSV, checkpoint). Override dengan `--production-ns`,
+`--nvt-ns`, `--npt-ns`, `--platform CUDA|OpenCL|CPU`, atau `--minimize-only`.
+Jalur OpenFF penuh perlu diverifikasi di Colab/Linux karena wheel OpenFF
+tidak selalu tersedia untuk Windows atau versi Python lokal.
+
+
 ## Data dan Provenance
 
 | Target | Gen | Aksesi | Organisme | Level bukti |
@@ -241,7 +319,8 @@ referensi** dari spesies *Cladosporium* lain.
   ikat; hasilnya perlu diverifikasi dengan PLIP/Arpeggio dan MD/MM-PBSA.
 - Laccase 1GW0 tidak memiliki hidrogen pada PDB bersih; sebagian H-bond hanya
   dapat dilaporkan sebagai kandidat distance-only.
-- Tidak ada validasi eksperimental atau simulasi MD untuk pose docking.
+- Belum ada simulasi MD produksi atau validasi eksperimental untuk pose
+  docking; `prepare_openmm_md.py` baru menyiapkan sistem dan runner.
 - Semua hasil komputasi memerlukan validasi eksperimental.
 
 ## Output
@@ -258,6 +337,10 @@ referensi** dari spesies *Cladosporium* lain.
 - `results/interactions.json` — peta H-bond/hidrofobik/pi-pi.
 - `results/interactions.tsv` — tabel interaksi untuk analisis lanjutan.
 - `results/interactions.md` — ringkasan interaksi per kompleks.
+- `results/pose_clusters.json` — klaster pose dan statistik per klaster.
+- `results/pose_clusters.tsv` — tabel ringkas klaster pose.
+- `results/pose_clusters.md` — ringkasan klaster per kompleks.
+- `results/md_prep/` — sistem OpenMM tersolvasi dan runner MD (di-ignore Git).
 - `results/visualization/index.html` — viewer 3D (di-ignore Git).
 - `results/summary_report.md` — laporan ringkasan.
 - `models/melanin_radiosynthesis_fba_v2.xml` — model SBML.
@@ -287,6 +370,10 @@ melanin-biotech/
 │   ├── interactions.json
 │   ├── interactions.tsv
 │   ├── interactions.md
+│   ├── pose_clusters.json
+│   ├── pose_clusters.tsv
+│   ├── pose_clusters.md
+│   ├── md_prep/              # sistem OpenMM + runner MD (di-ignore)
 │   ├── visualization/       # HTML viewer 3D (di-ignore)
 │   └── summary_report.md
 ├── src/
@@ -298,6 +385,8 @@ melanin-biotech/
 │   ├── melanin_docking.py
 │   ├── analyze_interactions.py
 │   ├── visualize_pose.py
+│   ├── cluster_poses.py
+│   ├── prepare_openmm_md.py
 │   ├── generate_report.py
 │   ├── generate_readme.py
 │   └── run_pipeline.py
@@ -310,6 +399,7 @@ melanin-biotech/
 ├── tests/                   # placeholder test suite (belum ada test otomatis)
 ├── .gitignore
 ├── requirements.txt
+├── requirements-md.txt
 └── README.md
 ```
 

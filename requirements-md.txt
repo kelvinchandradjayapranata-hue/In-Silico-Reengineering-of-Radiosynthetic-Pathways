@@ -1,0 +1,12 @@
+# Dependensi tambahan untuk src/prepare_openmm_md.py dan runner MD.
+# Pasang di atas requirements.txt pada Colab/Linux (bukan CPU lokal):
+#   python -m pip install -r requirements.txt -r requirements-md.txt
+#
+# OpenFF Toolkit tidak selalu menyediakan wheel untuk Windows; gunakan
+# runtime Linux/Colab. Versi dibiarkan sebagai batas bawah agar cocok dengan
+# image Colab terbaru.
+openmm>=8.1
+pdbfixer>=1.9
+openmmforcefields>=0.14
+openff-toolkit>=0.16
+openff-forcefields>=2024.1

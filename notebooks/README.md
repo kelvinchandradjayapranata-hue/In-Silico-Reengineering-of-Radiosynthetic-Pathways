@@ -2,6 +2,14 @@
 
 - `docking_colab.ipynb` — runner AutoDock Vina multi-seed untuk Google Colab
   CPU. Buka di Colab, pilih runtime CPU, lalu jalankan sel dari atas ke bawah.
+- Setelah pose tersedia, buat peta interaksi dengan
+  `python src/analyze_interactions.py --ligand DHN_monomer` dan viewer 3D
+  dengan `python src/visualize_pose.py --interactions results/interactions.json`.
+- Klastering pose RMSD: `python src/cluster_poses.py --ligand DHN_monomer`.
+- Preparasi dan runner MD OpenMM di Colab:
+  `python -m pip install -r requirements.txt -r requirements-md.txt`, lalu
+  `python src/prepare_openmm_md.py --ligand DHN_monomer`. Jalankan sistem yang
+  dihasilkan dengan `bash results/md_prep/<reseptor>__<ligan>/run_colab.sh`.
 
 Rencana notebook eksplorasi tambahan:
 
