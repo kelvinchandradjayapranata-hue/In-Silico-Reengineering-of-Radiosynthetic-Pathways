@@ -21,6 +21,8 @@ Dokumentasi utama saat ini tersedia di:
   frame reseptor.
 - `src/prepare_openmm_md.py` — preparasi sistem protein-ligan tersolvasi dan
   runner MD OpenMM untuk Colab.
+- `src/analyze_md_trajectory.py` — RMSD backbone/ligan, RMSF per residu, dan
+  occupancy H-bond dari trajektori MD.
 - `requirements-md.txt` — dependency OpenMM/PDBFixer/OpenFF (Colab/Linux).
 
 ## Menjalankan docking di Google Colab
@@ -86,6 +88,20 @@ Setiap sistem di `results/md_prep/<reseptor>__<ligan>/` berisi `system.xml`,
 Runner menjalankan minimisasi, NVT/NPT singkat, lalu produksi 10 ns; semua
 parameter dapat di-override dari CLI. `results/md_prep/` di-ignore Git.
 
+Setelah produksi selesai, analisis trajektori dijalankan lokal:
+
+```bash
+python src/analyze_md_trajectory.py \
+  --system-dir results/md_prep/PKS1_surrogate_8CG4__DHN_monomer
+```
+
+Output: `results/plots/md_trajectory_analysis.png`,
+`results/md_trajectory_analysis.json`, dan
+`results/md_trajectory_analysis.md`. RMSD dihitung setelah superposisi
+backbone; RMSD ligan memakai frame reseptor; H-bond memakai kriteria
+D...A <=3.5 Å dan sudut D-H...A >=120°. Gunakan `--stride` untuk mengurangi
+memori pada trajektori panjang.
+
 ## Pertanyaan riset awal
 
 1. Bagaimana stoikiometri jalur DHN-melanin dan DOPA-melanin dapat
@@ -103,6 +119,7 @@ parameter dapat di-override dari CLI. `results/md_prep/` di-ignore Git.
 - [x] Menyediakan runner Colab CPU untuk docking presisi tinggi multi-seed.
 - [x] Menambahkan peta interaksi dan viewer 3D pose ligan.
 - [x] Menambahkan klastering pose RMSD dan preparasi sistem MD OpenMM.
+- [x] Menambahkan analisis trajektori MD (RMSD, RMSF, occupancy H-bond).
 - [ ] Kalibrasi parameter biomass dan ATP maintenance.
 - [ ] Menambahkan analisis sensitivitas parameter (bukan hanya batas radiasi).
 - [ ] Menambahkan test suite dan CI.

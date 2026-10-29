@@ -9,6 +9,8 @@ meeko==0.8.0
 # Dependensi runtime Meeko (tidak dideklarasikan sebagai Requires oleh paketnya)
 gemmi==0.7.5
 scipy==1.18.1
+# Analisis trajektori MD (RMSD/RMSF/H-bond occupancy).
+mdtraj==1.11.2
 
 # AutoDock Vina bukan paket Python; binary Windows diletakkan di tools/vina/
 # (lihat README) agar modul docking dapat dijalankan.

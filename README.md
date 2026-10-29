@@ -41,8 +41,10 @@ stoikiometri tereduksi.
    di frame reseptor.
 10. **`src/prepare_openmm_md.py`** — preparasi sistem protein-ligan tersolvasi
     untuk MD OpenMM eksplisit.
-11. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
-12. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
+11. **`src/analyze_md_trajectory.py`** — RMSD, RMSF, dan occupancy H-bond
+    dari trajektori MD.
+12. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
+13. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
 
 ## Quickstart (Windows PowerShell)
 
@@ -86,6 +88,9 @@ python src/cluster_poses.py --ligand DHN_monomer
 
 # Preparasi MD OpenMM (butuh OpenMM/OpenFF; jalankan di Colab/Linux)
 python src/prepare_openmm_md.py --ligand DHN_monomer
+
+# Analisis trajektori MD setelah produksi selesai
+python src/analyze_md_trajectory.py --system-dir results/md_prep/PKS1_surrogate_8CG4__DHN_monomer
 ```
 
 Catatan tool opsional:
@@ -255,6 +260,33 @@ Jalur OpenFF penuh perlu diverifikasi di Colab/Linux karena wheel OpenFF
 tidak selalu tersedia untuk Windows atau versi Python lokal.
 
 
+## Analisis Trajektori MD
+
+Setelah `run_md.py` menyelesaikan tahap produksi, analisis trajektori dapat
+dijalankan lokal dengan MDTraj (sudah ada di `requirements.txt`):
+
+```bash
+python src/analyze_md_trajectory.py \
+  --system-dir results/md_prep/PKS1_surrogate_8CG4__DHN_monomer
+```
+
+Output default:
+
+- `results/plots/md_trajectory_analysis.png` — empat panel: RMSD backbone,
+  RMSD ligan di frame reseptor, RMSF per residu CA, dan occupancy H-bond;
+- `results/md_trajectory_analysis.json` — nilai per frame, RMSF per residu,
+  dan daftar H-bond;
+- `results/md_trajectory_analysis.md` — ringkasan untuk audit.
+
+Metrik dihitung setelah superposisi backbone ke frame pertama. RMSD ligan
+memakai atom berat dan diukur di frame reseptor, sehingga mencerminkan drift
+pose, bukan perubahan konformasi internal ligan. H-bond protein-ligan memakai
+kriteria donor-akseptor <=3.5 Å dan sudut D-H...A >=120°; occupancy adalah
+fraksi frame. Gunakan `--stride` untuk mengurangi beban memori, `--no-hbonds`
+untuk melewati analisis H-bond, atau `--ligand-resname` bila nama residu ligan
+berbeda. Analisis ini geometris dan bukan energi ikat.
+
+
 ## Data dan Provenance
 
 | Target | Gen | Aksesi | Organisme | Level bukti |
@@ -321,6 +353,8 @@ referensi** dari spesies *Cladosporium* lain.
   dapat dilaporkan sebagai kandidat distance-only.
 - Belum ada simulasi MD produksi atau validasi eksperimental untuk pose
   docking; `prepare_openmm_md.py` baru menyiapkan sistem dan runner.
+- Analisis trajektori MD memakai RMSD tanpa koreksi simetri dan occupancy
+  H-bond geometris; keduanya bukan energi bebas ikat.
 - Semua hasil komputasi memerlukan validasi eksperimental.
 
 ## Output
@@ -341,6 +375,9 @@ referensi** dari spesies *Cladosporium* lain.
 - `results/pose_clusters.tsv` — tabel ringkas klaster pose.
 - `results/pose_clusters.md` — ringkasan klaster per kompleks.
 - `results/md_prep/` — sistem OpenMM tersolvasi dan runner MD (di-ignore Git).
+- `results/plots/md_trajectory_analysis.png` — grafik RMSD/RMSF/H-bond MD.
+- `results/md_trajectory_analysis.json` — data analisis trajektori.
+- `results/md_trajectory_analysis.md` — ringkasan analisis trajektori.
 - `results/visualization/index.html` — viewer 3D (di-ignore Git).
 - `results/summary_report.md` — laporan ringkasan.
 - `models/melanin_radiosynthesis_fba_v2.xml` — model SBML.
@@ -373,6 +410,8 @@ melanin-biotech/
 │   ├── pose_clusters.json
 │   ├── pose_clusters.tsv
 │   ├── pose_clusters.md
+│   ├── md_trajectory_analysis.json
+│   ├── md_trajectory_analysis.md
 │   ├── md_prep/              # sistem OpenMM + runner MD (di-ignore)
 │   ├── visualization/       # HTML viewer 3D (di-ignore)
 │   └── summary_report.md
@@ -387,6 +426,7 @@ melanin-biotech/
 │   ├── visualize_pose.py
 │   ├── cluster_poses.py
 │   ├── prepare_openmm_md.py
+│   ├── analyze_md_trajectory.py
 │   ├── generate_report.py
 │   ├── generate_readme.py
 │   └── run_pipeline.py

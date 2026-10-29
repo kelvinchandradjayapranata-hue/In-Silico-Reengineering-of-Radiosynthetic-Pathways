@@ -10,6 +10,9 @@
   `python -m pip install -r requirements.txt -r requirements-md.txt`, lalu
   `python src/prepare_openmm_md.py --ligand DHN_monomer`. Jalankan sistem yang
   dihasilkan dengan `bash results/md_prep/<reseptor>__<ligan>/run_colab.sh`.
+- Analisis trajektori MD setelah produksi:
+  `python src/analyze_md_trajectory.py --system-dir results/md_prep/<reseptor>__<ligan>`
+  (menulis grafik ke `results/plots/md_trajectory_analysis.png`).
 
 Rencana notebook eksplorasi tambahan:
 
