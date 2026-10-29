@@ -23,6 +23,10 @@ Dokumentasi utama saat ini tersedia di:
   runner MD OpenMM untuk Colab.
 - `src/analyze_md_trajectory.py` — RMSD backbone/ligan, RMSF per residu, dan
   occupancy H-bond dari trajektori MD.
+- `src/marcus_electron_transfer.py` — kalkulator laju transfer elektron
+  non-adiabatik Marcus dari parameter DFT/MD.
+- `docs/marcus_dft_protocol.md` — protokol DFT, four-point reorganization,
+  outer-sphere, coupling, dan caveat NAD+/NADP+.
 - `requirements-md.txt` — dependency OpenMM/PDBFixer/OpenFF (Colab/Linux).
 
 ## Menjalankan docking di Google Colab
@@ -102,6 +106,32 @@ backbone; RMSD ligan memakai frame reseptor; H-bond memakai kriteria
 D...A <=3.5 Å dan sudut D-H...A >=120°. Gunakan `--stride` untuk mengurangi
 memori pada trajektori panjang.
 
+## Transfer elektron Marcus (DFT → laju)
+
+`marcus_electron_transfer.py` hanya menghitung persamaan laju; ia tidak
+menjalankan DFT. Parameter ΔG°, λ, dan H_AB harus berasal dari DFT/MD atau
+data eksperimental. Modul ini stdlib-only dan dapat dijalankan lokal:
+
+```bash
+python src/marcus_electron_transfer.py --self-test
+python src/marcus_electron_transfer.py \
+  --delta-g-ev -0.18 --lambda-inner-ev 0.45 --lambda-outer-ev 0.85 \
+  --coupling 1.0 --coupling-unit meV
+```
+
+Output default: `results/marcus_electron_transfer.json` dan
+`results/marcus_electron_transfer.md`. Untuk four-point DFT, gunakan
+`--four-point-json`; untuk parameter bola/kontinum, gunakan
+`--donor-radius-a`, `--acceptor-radius-a`, `--distance-a`, `--eps-static`,
+dan `--eps-optical`.
+
+**Caveat utama:** NAD+/NADP+ adalah akseptor hidrida dua-elektron dalam
+metabolisme normal, bukan akseptor elektron luar-sphere satu-elektron.
+Oksidasi DHN juga pH-dependent dan dapat berlangsung melalui PCET. Model
+Marcus satu-elektron hanya sah untuk jalur yang didefinisikan eksplisit dan
+tidak otomatis mewakili hidrida fisiologis. Detail protokol dan validasi ada
+di `docs/marcus_dft_protocol.md`.
+
 ## Pertanyaan riset awal
 
 1. Bagaimana stoikiometri jalur DHN-melanin dan DOPA-melanin dapat
@@ -120,6 +150,8 @@ memori pada trajektori panjang.
 - [x] Menambahkan peta interaksi dan viewer 3D pose ligan.
 - [x] Menambahkan klastering pose RMSD dan preparasi sistem MD OpenMM.
 - [x] Menambahkan analisis trajektori MD (RMSD, RMSF, occupancy H-bond).
+- [x] Menambahkan kalkulator laju Marcus dan protokol DFT/Marcus.
+- [ ] Menjalankan DFT produksi untuk four-point λ dan H_AB (Colab/HPC).
 - [ ] Kalibrasi parameter biomass dan ATP maintenance.
 - [ ] Menambahkan analisis sensitivitas parameter (bukan hanya batas radiasi).
 - [ ] Menambahkan test suite dan CI.

@@ -43,8 +43,10 @@ stoikiometri tereduksi.
     untuk MD OpenMM eksplisit.
 11. **`src/analyze_md_trajectory.py`** — RMSD, RMSF, dan occupancy H-bond
     dari trajektori MD.
-12. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
-13. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
+12. **`src/marcus_electron_transfer.py`** — kalkulator laju transfer elektron
+    non-adiabatik Marcus dari parameter DFT/MD.
+13. **`src/generate_report.py`** — laporan ke `results/summary_report.md`.
+14. **`src/run_pipeline.py`** — orkestrasi tahap inti dan tahap opsional.
 
 ## Quickstart (Windows PowerShell)
 
@@ -91,6 +93,10 @@ python src/prepare_openmm_md.py --ligand DHN_monomer
 
 # Analisis trajektori MD setelah produksi selesai
 python src/analyze_md_trajectory.py --system-dir results/md_prep/PKS1_surrogate_8CG4__DHN_monomer
+
+# Estimasi laju transfer elektron Marcus dari parameter DFT/MD
+python src/marcus_electron_transfer.py --self-test
+python src/marcus_electron_transfer.py   --delta-g-ev -0.18 --lambda-inner-ev 0.45 --lambda-outer-ev 0.85   --coupling 1.0 --coupling-unit meV
 ```
 
 Catatan tool opsional:
@@ -287,6 +293,53 @@ untuk melewati analisis H-bond, atau `--ligand-resname` bila nama residu ligan
 berbeda. Analisis ini geometris dan bukan energi ikat.
 
 
+## Transfer Elektron Marcus (DFT → Laju)
+
+`src/marcus_electron_transfer.py` mengubah parameter DFT/MD menjadi estimasi
+laju transfer elektron non-adiabatik satu-elektron:
+
+```text
+k_ET = (2π/ħ) |H_AB|² / sqrt(4π λ k_B T)
+       × exp[−(ΔG° + λ)² / (4 λ k_B T)]
+```
+
+Modul ini hanya menghitung persamaan laju (stdlib-only); ia tidak menjalankan
+DFT. Parameter ΔG°, λ, dan H_AB harus berasal dari DFT/MD atau data
+eksperimental.
+
+```bash
+# Self-test numerik
+python src/marcus_electron_transfer.py --self-test
+
+# Parameter langsung
+python src/marcus_electron_transfer.py \
+  --delta-g-ev -0.18 --lambda-inner-ev 0.45 --lambda-outer-ev 0.85 \
+  --coupling 1.0 --coupling-unit meV
+
+# Four-point λ dari DFT + outer-sphere kontinum
+python src/marcus_electron_transfer.py \
+  --four-point-json data/quantum/dhn_nad_four_point.json \
+  --donor-radius-a 3.2 --acceptor-radius-a 3.4 --distance-a 6.5 \
+  --eps-static 78.355 --eps-optical 1.776 \
+  --delta-g-ev -0.18 --coupling 1.0 --coupling-unit meV
+```
+
+ΔG° juga dapat diturunkan dari potensial reduksi dengan `--donor-e0-v` dan
+`--acceptor-e0-v` (referensi elektroda harus sama). Semua parameter dapat
+diletakkan di satu JSON dan dijalankan dengan `--config`.
+
+Output default: `results/marcus_electron_transfer.json` dan
+`results/marcus_electron_transfer.md`. Protokol DFT lengkap (four-point,
+SMD, GMH/CDFT, ensemble MD, validasi) ada di `docs/marcus_dft_protocol.md`.
+
+**Caveat utama:** NAD+/NADP+ adalah akseptor hidrida dua-elektron dalam
+metabolisme normal, bukan akseptor elektron luar-sphere satu-elektron.
+Oksidasi DHN juga pH-dependent dan dapat berlangsung melalui PCET. Model
+Marcus satu-elektron hanya sah untuk jalur yang didefinisikan eksplisit dan
+tidak otomatis mewakili hidrida fisiologis. DFT produksi dijalankan di
+Colab/HPC, bukan CPU lokal.
+
+
 ## Data dan Provenance
 
 | Target | Gen | Aksesi | Organisme | Level bukti |
@@ -355,6 +408,10 @@ referensi** dari spesies *Cladosporium* lain.
   docking; `prepare_openmm_md.py` baru menyiapkan sistem dan runner.
 - Analisis trajektori MD memakai RMSD tanpa koreksi simetri dan occupancy
   H-bond geometris; keduanya bukan energi bebas ikat.
+- Model Marcus satu-elektron tidak otomatis mewakili hidrida NAD+/NADP+
+  fisiologis atau PCET oksidasi DHN; lihat `docs/marcus_dft_protocol.md`.
+- Parameter DFT untuk four-point λ dan H_AB belum dijalankan; angka contoh
+  di dokumentasi bukan hasil ilmiah.
 - Semua hasil komputasi memerlukan validasi eksperimental.
 
 ## Output
@@ -378,6 +435,8 @@ referensi** dari spesies *Cladosporium* lain.
 - `results/plots/md_trajectory_analysis.png` — grafik RMSD/RMSF/H-bond MD.
 - `results/md_trajectory_analysis.json` — data analisis trajektori.
 - `results/md_trajectory_analysis.md` — ringkasan analisis trajektori.
+- `results/marcus_electron_transfer.json` — parameter dan laju Marcus.
+- `results/marcus_electron_transfer.md` — ringkasan audit estimasi Marcus.
 - `results/visualization/index.html` — viewer 3D (di-ignore Git).
 - `results/summary_report.md` — laporan ringkasan.
 - `models/melanin_radiosynthesis_fba_v2.xml` — model SBML.
@@ -412,6 +471,8 @@ melanin-biotech/
 │   ├── pose_clusters.md
 │   ├── md_trajectory_analysis.json
 │   ├── md_trajectory_analysis.md
+│   ├── marcus_electron_transfer.json
+│   ├── marcus_electron_transfer.md
 │   ├── md_prep/              # sistem OpenMM + runner MD (di-ignore)
 │   ├── visualization/       # HTML viewer 3D (di-ignore)
 │   └── summary_report.md
@@ -427,6 +488,7 @@ melanin-biotech/
 │   ├── cluster_poses.py
 │   ├── prepare_openmm_md.py
 │   ├── analyze_md_trajectory.py
+│   ├── marcus_electron_transfer.py
 │   ├── generate_report.py
 │   ├── generate_readme.py
 │   └── run_pipeline.py

@@ -13,6 +13,10 @@
 - Analisis trajektori MD setelah produksi:
   `python src/analyze_md_trajectory.py --system-dir results/md_prep/<reseptor>__<ligan>`
   (menulis grafik ke `results/plots/md_trajectory_analysis.png`).
+- Kalkulator laju Marcus dari parameter DFT/MD:
+  `python src/marcus_electron_transfer.py --self-test`, lalu lihat
+  `docs/marcus_dft_protocol.md` untuk protokol four-point λ, outer-sphere,
+  dan caveat NAD+/NADP+.
 
 Rencana notebook eksplorasi tambahan:
 
