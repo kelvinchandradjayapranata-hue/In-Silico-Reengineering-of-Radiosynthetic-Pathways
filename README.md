@@ -2,7 +2,7 @@
 
 **AI-Driven Bio-Computational Framework for Cosmic Radiation Energy Conversion Using Fungal Melanin Templates**
 
-> README dibuat otomatis oleh `src/generate_readme.py` pada 2026-10-28.
+> README dibuat otomatis oleh `src/generate_readme.py` pada 2026-10-29.
 > Proyek ini masih tahap eksplorasi komputasi; semua hasil adalah estimasi in silico.
 
 ## Abstrak
