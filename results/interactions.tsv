@@ -1,0 +1,18 @@
+complex	receptor	ligand	interaction_type	protein_residue	chain	protein_atom	ligand_atom	distance_angstrom	angle_deg	detail
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	polar_contact	GLU235	A	OE2	O10	2.762	52.5	sudut di bawah ambang H-bond; confidence=weak
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	polar_contact	GLY299	A	N	O0	3.133		pasangan donor-akseptor cocok, tetapi atom H tidak tersedia untuk menghitung sudut; confidence=distance_only
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	polar_contact	ALA297	A	O	O10	3.154	117.1	sudut di bawah ambang H-bond; confidence=weak
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	polar_contact	GLU235	A	OE2	O0	3.155	111.2	sudut di bawah ambang H-bond; confidence=weak
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	polar_contact	GLY299	A	N	O10	3.175		pasangan donor-akseptor cocok, tetapi atom H tidak tersedia untuk menghitung sudut; confidence=distance_only
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	hydrophobic	PHE194	A	CD1,CE1	C2,C3	3.357		contact_count=3
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	hydrophobic	LEU429	A	CD1,CD2	C7,C8	3.389		contact_count=4
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	hydrophobic	PRO192	A	CD,CG	C11,C5,C6,C7,C8,C9	3.567		contact_count=7
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	pi_stacking	PHE194:ring	A	CG,CD1,CD2,CE1,CE2,CZ	C1,C2,C3,C4,C5,C11	5.962	80.2	T-shaped; geometry=offset; min_atom_distance=3.357
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	hbond	SER791	A	O	O10	3.005	136.3	ligand_donor; confidence=strong
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	polar_contact	THR647	A	O	O0	2.836	24.6	sudut di bawah ambang H-bond; confidence=weak
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	polar_contact	THR647	A	O	O10	2.989	25.2	sudut di bawah ambang H-bond; confidence=weak
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	hydrophobic	THR680	A	CG2	C4,C5,C6	3.482		contact_count=3
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	hydrophobic	PRO649	A	CB,CG	C6,C7,C8	3.647		contact_count=4
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	hydrophobic	PHE790	A	CB,CD2	C7,C8	3.668		contact_count=3
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	hydrophobic	THR682	A	CB	C3	3.931		contact_count=1
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	pi_stacking	PHE790:ring	A	CG,CD1,CD2,CE1,CE2,CZ	C5,C6,C7,C8,C9,C11	6.141	20.0	parallel; geometry=offset; min_atom_distance=3.747

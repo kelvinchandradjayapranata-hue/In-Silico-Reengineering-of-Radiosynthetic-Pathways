@@ -1,0 +1,12 @@
+complex	receptor	ligand	cluster_id	population	fraction	representative_seed	representative_model	best_affinity_kcal_mol	mean_affinity_kcal_mol	sd_affinity_kcal_mol	best_ligand_efficiency	mean_ligand_efficiency	max_intra_rmsd_angstrom	mean_intra_rmsd_angstrom	seeds	representative_pose_file
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	1	3	0.3333	42	1	-5.102	-5.062	0.058	-0.425	-0.422	1.587	1.067	42	results/docking/poses/Laccase_surrogate_1GW0__DHN_monomer.pdbqt
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	2	2	0.2222	42	4	-4.603	-4.596	0.009	-0.384	-0.384	0.364	0.364	42	results/docking/poses/Laccase_surrogate_1GW0__DHN_monomer.pdbqt
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	3	2	0.2222	42	6	-4.463	-4.460	0.004	-0.372	-0.371	0.015	0.015	42	results/docking/poses/Laccase_surrogate_1GW0__DHN_monomer.pdbqt
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	4	1	0.1111	42	8	-4.328	-4.328	0.000	-0.361	-0.361	0.000	0.000	42	results/docking/poses/Laccase_surrogate_1GW0__DHN_monomer.pdbqt
+Laccase_surrogate_1GW0__DHN_monomer	Laccase_surrogate_1GW0	DHN_monomer	5	1	0.1111	42	9	-4.130	-4.130	0.000	-0.344	-0.344	0.000	0.000	42	results/docking/poses/Laccase_surrogate_1GW0__DHN_monomer.pdbqt
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	1	2	0.2222	42	1	-5.911	-5.909	0.004	-0.493	-0.492	0.048	0.048	42	results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	2	2	0.2222	42	3	-5.873	-5.870	0.004	-0.489	-0.489	0.080	0.080	42	results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	3	2	0.2222	42	5	-5.722	-5.717	0.007	-0.477	-0.476	0.336	0.336	42	results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	4	1	0.1111	42	7	-5.700	-5.700	0.000	-0.475	-0.475	0.000	0.000	42	results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	5	1	0.1111	42	8	-5.605	-5.605	0.000	-0.467	-0.467	0.000	0.000	42	results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt
+PKS1_surrogate_8CG4__DHN_monomer	PKS1_surrogate_8CG4	DHN_monomer	6	1	0.1111	42	9	-5.552	-5.552	0.000	-0.463	-0.463	0.000	0.000	42	results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt

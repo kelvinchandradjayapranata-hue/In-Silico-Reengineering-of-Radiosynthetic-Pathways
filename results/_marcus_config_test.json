@@ -1,0 +1,24 @@
+{
+  "delta_g_ev": -0.18,
+  "four_point": {
+    "donor": {
+      "neutral_at_neutral_eV": 0.0,
+      "cation_at_neutral_eV": 7.0,
+      "cation_at_cation_eV": 6.8,
+      "neutral_at_cation_eV": 0.1
+    },
+    "acceptor": {
+      "neutral_at_neutral_eV": 0.0,
+      "anion_at_neutral_eV": -1.0,
+      "anion_at_anion_eV": -1.25,
+      "neutral_at_anion_eV": 0.1
+    }
+  },
+  "donor_radius_angstrom": 3.0,
+  "acceptor_radius_angstrom": 3.0,
+  "distance_angstrom": 6.0,
+  "dielectric_static": 78.355,
+  "dielectric_optical": 1.776,
+  "coupling_ev": 0.001,
+  "temperature_k": 298.15
+}

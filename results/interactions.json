@@ -1,0 +1,599 @@
+{
+  "generated_at": "2026-10-28T15:30:57.078095+00:00",
+  "tool": "melanin_biotech_interaction_analysis",
+  "status": "completed",
+  "docking_file": "results/docking_results.json",
+  "docking_status": "completed",
+  "docking_aggregation": null,
+  "docking_mode": "single_seed",
+  "parameters": {
+    "cutoff_hbond_angstrom": 3.5,
+    "min_hbond_angle_deg": 120.0,
+    "cutoff_hydrophobic_angstrom": 4.0,
+    "cutoff_pipi_angstrom": 5.5,
+    "max_pipi_centroid_offset_angstrom": 6.5,
+    "max_pipi_atom_distance_angstrom": 4.0,
+    "receptor_filter": [],
+    "ligand_filter": [
+      "DHN_monomer"
+    ],
+    "chain_override": null
+  },
+  "complexes": [
+    {
+      "status": "ok",
+      "receptor": "Laccase_surrogate_1GW0",
+      "ligand": "DHN_monomer",
+      "pdb_id": "1GW0",
+      "target_accession": "KAN3060494.1",
+      "identity_percent": 44.7,
+      "coverage_percent": 91.7,
+      "surrogate": true,
+      "seed": 42,
+      "seeds": [],
+      "affinity_kcal_mol": -5.102,
+      "ligand_efficiency": -0.425,
+      "heavy_atoms": 12,
+      "ligand_smiles": "Oc1cccc2cccc(O)c12",
+      "pose_file": "results/docking/poses/Laccase_surrogate_1GW0__DHN_monomer.pdbqt",
+      "receptor_file": "data/structures/prepared/Laccase_surrogate_1GW0_clean.pdb",
+      "receptor_chain": "A",
+      "hbonds": [],
+      "polar_contacts": [
+        {
+          "ligand_atom": "O10",
+          "ligand_element": "O",
+          "ligand_position": [
+            -0.495,
+            8.311,
+            14.981
+          ],
+          "protein_residue": "GLU235",
+          "protein_chain": "A",
+          "protein_resname": "GLU",
+          "protein_resi": 235,
+          "protein_icode": "",
+          "protein_atom": "OE2",
+          "protein_element": "O",
+          "protein_position": [
+            -1.96,
+            6.801,
+            13.191
+          ],
+          "distance_angstrom": 2.762,
+          "direction": "ligand_donor",
+          "hydrogen": "H19",
+          "angle_deg": 52.5,
+          "geometry_ok": false,
+          "confidence": "weak",
+          "reason": "sudut di bawah ambang H-bond"
+        },
+        {
+          "ligand_atom": "O0",
+          "ligand_element": "O",
+          "ligand_position": [
+            -2.772,
+            7.508,
+            16.157
+          ],
+          "protein_residue": "GLY299",
+          "protein_chain": "A",
+          "protein_resname": "GLY",
+          "protein_resi": 299,
+          "protein_icode": "",
+          "protein_atom": "N",
+          "protein_element": "N",
+          "protein_position": [
+            -0.697,
+            5.215,
+            15.653
+          ],
+          "distance_angstrom": 3.133,
+          "direction": "protein_donor",
+          "hydrogen": null,
+          "angle_deg": null,
+          "geometry_ok": null,
+          "confidence": "distance_only",
+          "reason": "pasangan donor-akseptor cocok, tetapi atom H tidak tersedia untuk menghitung sudut"
+        },
+        {
+          "ligand_atom": "O10",
+          "ligand_element": "O",
+          "ligand_position": [
+            -0.495,
+            8.311,
+            14.981
+          ],
+          "protein_residue": "ALA297",
+          "protein_chain": "A",
+          "protein_resname": "ALA",
+          "protein_resi": 297,
+          "protein_icode": "",
+          "protein_atom": "O",
+          "protein_element": "O",
+          "protein_position": [
+            2.537,
+            7.831,
+            15.706
+          ],
+          "distance_angstrom": 3.154,
+          "direction": "ligand_donor",
+          "hydrogen": "H19",
+          "angle_deg": 117.1,
+          "geometry_ok": false,
+          "confidence": "weak",
+          "reason": "sudut di bawah ambang H-bond"
+        },
+        {
+          "ligand_atom": "O0",
+          "ligand_element": "O",
+          "ligand_position": [
+            -2.772,
+            7.508,
+            16.157
+          ],
+          "protein_residue": "GLU235",
+          "protein_chain": "A",
+          "protein_resname": "GLU",
+          "protein_resi": 235,
+          "protein_icode": "",
+          "protein_atom": "OE2",
+          "protein_element": "O",
+          "protein_position": [
+            -1.96,
+            6.801,
+            13.191
+          ],
+          "distance_angstrom": 3.155,
+          "direction": "ligand_donor",
+          "hydrogen": "H12",
+          "angle_deg": 111.2,
+          "geometry_ok": false,
+          "confidence": "weak",
+          "reason": "sudut di bawah ambang H-bond"
+        },
+        {
+          "ligand_atom": "O10",
+          "ligand_element": "O",
+          "ligand_position": [
+            -0.495,
+            8.311,
+            14.981
+          ],
+          "protein_residue": "GLY299",
+          "protein_chain": "A",
+          "protein_resname": "GLY",
+          "protein_resi": 299,
+          "protein_icode": "",
+          "protein_atom": "N",
+          "protein_element": "N",
+          "protein_position": [
+            -0.697,
+            5.215,
+            15.653
+          ],
+          "distance_angstrom": 3.175,
+          "direction": "protein_donor",
+          "hydrogen": null,
+          "angle_deg": null,
+          "geometry_ok": null,
+          "confidence": "distance_only",
+          "reason": "pasangan donor-akseptor cocok, tetapi atom H tidak tersedia untuk menghitung sudut"
+        }
+      ],
+      "hydrophobic_contacts": [
+        {
+          "protein_residue": "PHE194",
+          "protein_chain": "A",
+          "protein_resname": "PHE",
+          "protein_resi": 194,
+          "protein_icode": "",
+          "contact_count": 3,
+          "ligand_atoms": [
+            "C2",
+            "C3"
+          ],
+          "protein_atoms": [
+            "CD1",
+            "CE1"
+          ],
+          "min_distance_angstrom": 3.357,
+          "representative_ligand_position": [
+            -3.637,
+            8.842,
+            17.889
+          ],
+          "representative_protein_position": [
+            -5.159,
+            6.588,
+            19.857
+          ]
+        },
+        {
+          "protein_residue": "LEU429",
+          "protein_chain": "A",
+          "protein_resname": "LEU",
+          "protein_resi": 429,
+          "protein_icode": "",
+          "contact_count": 4,
+          "ligand_atoms": [
+            "C7",
+            "C8"
+          ],
+          "protein_atoms": [
+            "CD1",
+            "CD2"
+          ],
+          "min_distance_angstrom": 3.389,
+          "representative_ligand_position": [
+            0.058,
+            11.761,
+            15.957
+          ],
+          "representative_protein_position": [
+            3.424,
+            12.157,
+            15.917
+          ]
+        },
+        {
+          "protein_residue": "PRO192",
+          "protein_chain": "A",
+          "protein_resname": "PRO",
+          "protein_resi": 192,
+          "protein_icode": "",
+          "contact_count": 7,
+          "ligand_atoms": [
+            "C11",
+            "C5",
+            "C6",
+            "C7",
+            "C8",
+            "C9"
+          ],
+          "protein_atoms": [
+            "CD",
+            "CG"
+          ],
+          "min_distance_angstrom": 3.567,
+          "representative_ligand_position": [
+            -1.736,
+            9.664,
+            16.57
+          ],
+          "representative_protein_position": [
+            -3.43,
+            11.669,
+            14.154
+          ]
+        }
+      ],
+      "pi_stacking": [
+        {
+          "ligand_ring": "ligand_ring_1",
+          "ligand_ring_atoms": [
+            "C1",
+            "C2",
+            "C3",
+            "C4",
+            "C5",
+            "C11"
+          ],
+          "protein_ring": "PHE194:ring",
+          "protein_residue": "PHE194",
+          "protein_resname": "PHE",
+          "protein_resi": 194,
+          "protein_icode": "",
+          "protein_ring_atoms": [
+            "CG",
+            "CD1",
+            "CD2",
+            "CE1",
+            "CE2",
+            "CZ"
+          ],
+          "centroid_distance_angstrom": 5.962,
+          "min_atom_distance_angstrom": 3.357,
+          "angle_deg": 80.2,
+          "stacking_type": "T-shaped",
+          "geometry": "offset",
+          "ligand_centroid": [
+            -2.721,
+            9.862,
+            17.58
+          ],
+          "protein_centroid": [
+            -6.255,
+            5.75,
+            20.06
+          ]
+        }
+      ],
+      "summary": {
+        "hbonds": 0,
+        "polar_contacts": 5,
+        "hydrophobic_residues": 3,
+        "hydrophobic_atom_pairs": 14,
+        "pi_stacking": 1
+      }
+    },
+    {
+      "status": "ok",
+      "receptor": "PKS1_surrogate_8CG4",
+      "ligand": "DHN_monomer",
+      "pdb_id": "8CG4",
+      "target_accession": "KAN3049821.1",
+      "identity_percent": 36.4,
+      "coverage_percent": 94.7,
+      "surrogate": true,
+      "seed": 42,
+      "seeds": [],
+      "affinity_kcal_mol": -5.911,
+      "ligand_efficiency": -0.493,
+      "heavy_atoms": 12,
+      "ligand_smiles": "Oc1cccc2cccc(O)c12",
+      "pose_file": "results/docking/poses/PKS1_surrogate_8CG4__DHN_monomer.pdbqt",
+      "receptor_file": "data/structures/prepared/PKS1_surrogate_8CG4_clean.pdb",
+      "receptor_chain": "A",
+      "hbonds": [
+        {
+          "ligand_atom": "O10",
+          "ligand_element": "O",
+          "ligand_position": [
+            170.759,
+            170.972,
+            137.08
+          ],
+          "protein_residue": "SER791",
+          "protein_chain": "A",
+          "protein_resname": "SER",
+          "protein_resi": 791,
+          "protein_icode": "",
+          "protein_atom": "O",
+          "protein_element": "O",
+          "protein_position": [
+            168.575,
+            169.136,
+            138.023
+          ],
+          "distance_angstrom": 3.005,
+          "direction": "ligand_donor",
+          "hydrogen": "H19",
+          "angle_deg": 136.3,
+          "geometry_ok": true,
+          "confidence": "strong"
+        }
+      ],
+      "polar_contacts": [
+        {
+          "ligand_atom": "O0",
+          "ligand_element": "O",
+          "ligand_position": [
+            171.175,
+            171.201,
+            134.436
+          ],
+          "protein_residue": "THR647",
+          "protein_chain": "A",
+          "protein_resname": "THR",
+          "protein_resi": 647,
+          "protein_icode": "",
+          "protein_atom": "O",
+          "protein_element": "O",
+          "protein_position": [
+            170.623,
+            173.649,
+            135.758
+          ],
+          "distance_angstrom": 2.836,
+          "direction": "ligand_donor",
+          "hydrogen": "H12",
+          "angle_deg": 24.6,
+          "geometry_ok": false,
+          "confidence": "weak",
+          "reason": "sudut di bawah ambang H-bond"
+        },
+        {
+          "ligand_atom": "O10",
+          "ligand_element": "O",
+          "ligand_position": [
+            170.759,
+            170.972,
+            137.08
+          ],
+          "protein_residue": "THR647",
+          "protein_chain": "A",
+          "protein_resname": "THR",
+          "protein_resi": 647,
+          "protein_icode": "",
+          "protein_atom": "O",
+          "protein_element": "O",
+          "protein_position": [
+            170.623,
+            173.649,
+            135.758
+          ],
+          "distance_angstrom": 2.989,
+          "direction": "ligand_donor",
+          "hydrogen": "H19",
+          "angle_deg": 25.2,
+          "geometry_ok": false,
+          "confidence": "weak",
+          "reason": "sudut di bawah ambang H-bond"
+        }
+      ],
+      "hydrophobic_contacts": [
+        {
+          "protein_residue": "THR680",
+          "protein_chain": "A",
+          "protein_resname": "THR",
+          "protein_resi": 680,
+          "protein_icode": "",
+          "contact_count": 3,
+          "ligand_atoms": [
+            "C4",
+            "C5",
+            "C6"
+          ],
+          "protein_atoms": [
+            "CG2"
+          ],
+          "min_distance_angstrom": 3.482,
+          "representative_ligand_position": [
+            175.238,
+            171.242,
+            135.214
+          ],
+          "representative_protein_position": [
+            177.551,
+            168.798,
+            136.109
+          ]
+        },
+        {
+          "protein_residue": "PRO649",
+          "protein_chain": "A",
+          "protein_resname": "PRO",
+          "protein_resi": 649,
+          "protein_icode": "",
+          "contact_count": 4,
+          "ligand_atoms": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "protein_atoms": [
+            "CB",
+            "CG"
+          ],
+          "min_distance_angstrom": 3.647,
+          "representative_ligand_position": [
+            172.618,
+            170.504,
+            138.441
+          ],
+          "representative_protein_position": [
+            173.335,
+            173.891,
+            139.588
+          ]
+        },
+        {
+          "protein_residue": "PHE790",
+          "protein_chain": "A",
+          "protein_resname": "PHE",
+          "protein_resi": 790,
+          "protein_icode": "",
+          "contact_count": 3,
+          "ligand_atoms": [
+            "C7",
+            "C8"
+          ],
+          "protein_atoms": [
+            "CB",
+            "CD2"
+          ],
+          "min_distance_angstrom": 3.668,
+          "representative_ligand_position": [
+            172.618,
+            170.504,
+            138.441
+          ],
+          "representative_protein_position": [
+            172.063,
+            167.635,
+            140.658
+          ]
+        },
+        {
+          "protein_residue": "THR682",
+          "protein_chain": "A",
+          "protein_resname": "THR",
+          "protein_resi": 682,
+          "protein_icode": "",
+          "contact_count": 1,
+          "ligand_atoms": [
+            "C3"
+          ],
+          "protein_atoms": [
+            "CB"
+          ],
+          "min_distance_angstrom": 3.931,
+          "representative_ligand_position": [
+            174.752,
+            171.534,
+            133.938
+          ],
+          "representative_protein_position": [
+            178.485,
+            171.343,
+            132.722
+          ]
+        }
+      ],
+      "pi_stacking": [
+        {
+          "ligand_ring": "ligand_ring_2",
+          "ligand_ring_atoms": [
+            "C5",
+            "C6",
+            "C7",
+            "C8",
+            "C9",
+            "C11"
+          ],
+          "protein_ring": "PHE790:ring",
+          "protein_residue": "PHE790",
+          "protein_resname": "PHE",
+          "protein_resi": 790,
+          "protein_icode": "",
+          "protein_ring_atoms": [
+            "CG",
+            "CD1",
+            "CD2",
+            "CE1",
+            "CE2",
+            "CZ"
+          ],
+          "centroid_distance_angstrom": 6.141,
+          "min_atom_distance_angstrom": 3.747,
+          "angle_deg": 20.0,
+          "stacking_type": "parallel",
+          "geometry": "offset",
+          "ligand_centroid": [
+            173.486,
+            170.741,
+            137.362
+          ],
+          "protein_centroid": [
+            173.807,
+            168.099,
+            142.896
+          ]
+        }
+      ],
+      "summary": {
+        "hbonds": 1,
+        "polar_contacts": 2,
+        "hydrophobic_residues": 4,
+        "hydrophobic_atom_pairs": 11,
+        "pi_stacking": 1
+      }
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "complexes_total": 2,
+    "complexes_failed": 0,
+    "hbonds_total": 1,
+    "hydrophobic_residues_total": 7,
+    "pi_stacking_total": 2
+  },
+  "caveats": [
+    "H-bond ditentukan secara geometris dari pose rigid; sudut hanya dihitung bila atom hidrogen tersedia. Protonasi reseptor dan ligan tidak dioptimalkan pada pH fisiologis.",
+    "Kontak hidrofobik adalah jarak atom karbon, bukan estimasi energi.",
+    "Klasifikasi pi-pi memakai jarak centroid (<=5.5 A), sudut normal ring, dan kandidat offset (centroid <=6.5 A, atom-terdekat <=4.0 A); ambang ini heuristik dan perlu diverifikasi dengan PLIP/Arpeggio.",
+    "Pose terbaik Vina belum tentu pose yang paling stabil secara dinamika; diperlukan klaster pose dan simulasi MD.",
+    "Reseptor adalah struktur homolog surrogate, bukan struktur target C. cladosporioides; hasil tidak boleh dilaporkan sebagai interaksi target sebenarnya."
+  ]
+}

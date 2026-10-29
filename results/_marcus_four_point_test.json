@@ -1,0 +1,14 @@
+{
+  "donor": {
+    "neutral_at_neutral_eV": 0.0,
+    "cation_at_neutral_eV": 7.0,
+    "cation_at_cation_eV": 6.8,
+    "neutral_at_cation_eV": 0.1
+  },
+  "acceptor": {
+    "neutral_at_neutral_eV": 0.0,
+    "anion_at_neutral_eV": -1.0,
+    "anion_at_anion_eV": -1.25,
+    "neutral_at_anion_eV": 0.1
+  }
+}

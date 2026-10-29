@@ -1,0 +1,46 @@
+{
+  "tool": "melanin_biotech_marcus_electron_transfer",
+  "generated_at": "2026-10-29T13:21:49.360667+00:00",
+  "model": "non-adiabatic Marcus (one-electron, fixed distance)",
+  "inputs": {
+    "delta_g_ev": -0.18,
+    "donor_e0_v": null,
+    "acceptor_e0_v": null,
+    "n_electrons": 1,
+    "lambda_inner_ev": 0.45,
+    "lambda_outer_ev": 0.85,
+    "lambda_source": {
+      "inner": "direct",
+      "outer": "direct"
+    },
+    "four_point": null,
+    "outer_sphere": null,
+    "coupling_ev": 0.001,
+    "coupling_cm1": 8.065544,
+    "coupling_unit": "meV",
+    "temperature_k": 298.15,
+    "thermal_energy_ev": 0.025693
+  },
+  "results": {
+    "delta_g_ev": -0.18,
+    "lambda_inner_ev": 0.45,
+    "lambda_outer_ev": 0.85,
+    "lambda_total_ev": 1.3,
+    "activation_energy_ev": 0.241231,
+    "coupling_ev": 0.001,
+    "coupling_cm1": 8.065544,
+    "temperature_k": 298.15,
+    "thermal_energy_ev": 0.025693,
+    "prefactor_s_inv": 14734440236.138126,
+    "exponential_factor": 8.4e-05,
+    "rate_s_inv": 1232223.844952,
+    "log10_rate_s_inv": 6.09069
+  },
+  "warnings": [],
+  "caveats": [
+    "NAD+/NADP+ is a hydride acceptor in normal metabolism; one-electron Marcus ET is a model, not the physiological hydride pathway.",
+    "DHN oxidation is pH-dependent and may proceed by PCET.",
+    "H_AB and lambda are highly sensitive to DFT functional, basis set, solvation, and geometry.",
+    "k_ET is a unimolecular rate at a fixed donor-acceptor distance, not a bimolecular diffusion-corrected rate."
+  ]
+}
